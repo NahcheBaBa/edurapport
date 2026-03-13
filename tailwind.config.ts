@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         heading: ["Poppins", "sans-serif"],
+        display: ["Epilogue", "sans-serif"],
         body: ["Nunito", "sans-serif"],
       },
       colors: {

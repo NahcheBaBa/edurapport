@@ -30,7 +30,7 @@ const methods = [
 const HowItWorks = () => (
   <section className="py-16 md:py-24 bg-background">
     <div className="container">
-      <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-center mb-14">
+      <h2 className="text-3xl md:text-4xl font-display font-extrabold text-center mb-14">
         <span className="text-foreground">How </span>
         <span className="text-gradient">the learning happens</span>
       </h2>
