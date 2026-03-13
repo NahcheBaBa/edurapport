@@ -18,11 +18,6 @@ const HeroSection = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* Decorative circle */}
-          <div className="absolute inset-0 rounded-full border-2 border-accent/30 scale-110 animate-[spin_20s_linear_infinite]" />
-          <div className="absolute -top-4 -right-4 w-6 h-6 rounded-full bg-primary opacity-60 animate-float" />
-          <div className="absolute top-8 -left-6 w-4 h-4 rounded-full bg-accent opacity-50 animate-float" style={{ animationDelay: "1s" }} />
-          <div className="absolute bottom-12 -right-8 w-5 h-5 rounded-full bg-secondary opacity-40 animate-float" style={{ animationDelay: "0.5s" }} />
           <img
             src={heroCharacter}
             alt="Edna - EduRapport mascot"
