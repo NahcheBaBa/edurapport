@@ -45,10 +45,7 @@ const HeroSection = () => {
             isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
           }`}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold leading-tight">
-            Your One-stop{" "}
-            <span className="text-gradient">for Learning the Easy Way</span>
-          </h1>
+          <img src={heroHeading} alt="Your One-stop for Learning the Easy Way" className="max-w-xs md:max-w-md lg:max-w-lg w-full" />
           <div className="flex flex-wrap gap-4 mt-8 justify-center md:justify-start">
             <a
               href="#signup"
