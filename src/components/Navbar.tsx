@@ -16,10 +16,10 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
       <div className="container flex items-center justify-between h-16">
         <a href="#" className="flex items-center gap-2">
-          <img src={logo} alt="EduRapport" className="h-10 w-10 object-cover" />
-          <span className="font-heading font-bold text-xl text-foreground">
-            Edu
-          </span>
+          <img src={logo} alt="EduRapport" className="h-10 w-10 border-none shadow-xl object-contain rounded-none" />
+          
+
+          
         </a>
 
         {/* Desktop */}
