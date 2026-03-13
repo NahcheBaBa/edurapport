@@ -7,7 +7,7 @@ const Footer = () =>
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <img alt="EduRapport" className="h-8 w-8 object-contain" src="/lovable-uploads/2971320b-51b5-4be3-b524-4d9707edc907.png" />
+            <img alt="EduRapport" className="h-14 w-auto object-contain" src="/lovable-uploads/2971320b-51b5-4be3-b524-4d9707edc907.png" />
             
           </div>
           <p className="text-xs opacity-70 leading-relaxed">
