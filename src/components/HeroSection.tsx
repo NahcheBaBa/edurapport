@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import heroCharacter from "@/assets/hero-character.png";
+import heroHeading from "@/assets/hero-heading.png";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
