@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -26,6 +27,10 @@ const SubjectSelection = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
       <main className="flex-1 flex flex-col items-center justify-center py-16 px-4">
+        <Link to="/" className="self-start mb-6 ml-4 md:ml-12 flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+          <ArrowLeft size={18} />
+          Back to Home
+        </Link>
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-primary text-center mb-12 uppercase tracking-wide">
           Select a Subject Let's Have a Rapport
         </h1>
