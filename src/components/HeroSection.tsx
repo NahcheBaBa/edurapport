@@ -43,12 +43,12 @@ const HeroSection = () => {
         >
           <img src={heroHeading} alt="Your One-stop for Learning the Easy Way" className="max-w-xs md:max-w-md lg:max-w-lg w-full" />
           <div className="flex flex-wrap gap-4 mt-8 justify-center md:justify-start">
-            <a
-              href="#signup"
+            <Link
+              to="/subjects"
               className="gradient-primary text-primary-foreground font-bold px-8 py-3 rounded-full text-sm hover:opacity-90 transition-opacity hover-scale"
             >
-              Sign up
-            </a>
+              Explore Subjects
+            </Link>
             <a
               href="#demo"
               className="border-2 border-foreground text-foreground font-bold px-8 py-3 rounded-full text-sm hover:bg-muted transition-colors hover-scale"
