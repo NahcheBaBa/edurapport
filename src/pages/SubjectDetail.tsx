@@ -1,13 +1,15 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, PlayCircle, FileText, BookOpen } from "lucide-react";
+import { ArrowLeft, PlayCircle, Music } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import subjectIllustration from "@/assets/subject-illustration.png";
 import { Button } from "@/components/ui/button";
+import { getLessonsForSubject } from "@/data/lessons";
 
 const SubjectDetail = () => {
   const { name } = useParams<{ name: string }>();
   const subjectName = decodeURIComponent(name || "");
+  const lessons = getLessonsForSubject(subjectName);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -22,17 +24,10 @@ const SubjectDetail = () => {
             Back to Subjects
           </Link>
 
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            {/* Illustration */}
+          <div className="flex flex-col md:flex-row items-center gap-10 mb-16">
             <div className="flex-shrink-0 w-64 md:w-[360px]">
-              <img
-                src={subjectIllustration}
-                alt={`${subjectName} illustration`}
-                className="w-full"
-              />
+              <img src={subjectIllustration} alt={`${subjectName} illustration`} className="w-full" />
             </div>
-
-            {/* Content */}
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground mb-4">
                 {subjectName}
@@ -40,22 +35,9 @@ const SubjectDetail = () => {
               <p className="text-muted-foreground font-body text-base md:text-lg mb-8 max-w-lg">
                 Explore interactive lessons, practice questions, and resources to master {subjectName}. Let's build rapport through learning!
               </p>
-
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <Button className="gradient-primary text-primary-foreground font-bold rounded-full px-8 gap-2">
-                  <PlayCircle size={18} />
-                  Start Learning
-                </Button>
-                <Button variant="outline" className="rounded-full px-8 font-bold gap-2">
-                  <FileText size={18} />
-                  Practice Test
-                </Button>
-              </div>
-
-              {/* Quick stats */}
-              <div className="mt-10 grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0">
+              <div className="grid grid-cols-3 gap-4 max-w-md mx-auto md:mx-0">
                 {[
-                  { value: "20+", label: "Lessons" },
+                  { value: `${lessons.length}`, label: "Lessons" },
                   { value: "50+", label: "Questions" },
                   { value: "Free", label: "Access" },
                 ].map((stat) => (
@@ -67,6 +49,42 @@ const SubjectDetail = () => {
               </div>
             </div>
           </div>
+
+          {/* Lessons List */}
+          <h2 className="text-2xl font-heading font-extrabold text-foreground mb-6">
+            Available <span className="text-gradient">Lessons</span>
+          </h2>
+          {lessons.length === 0 ? (
+            <div className="text-center py-16 bg-muted rounded-2xl">
+              <Music size={48} className="mx-auto text-muted-foreground mb-4" />
+              <p className="text-muted-foreground font-semibold">Lessons coming soon for {subjectName}!</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {lessons.map((lesson) => (
+                <Link
+                  key={lesson.id}
+                  to={`/lessons/${lesson.id}`}
+                  className="flex items-center gap-4 bg-muted hover:bg-muted/70 rounded-2xl p-4 transition-colors group"
+                >
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 shadow">
+                    <span className="text-primary-foreground text-[9px] font-bold text-center leading-tight px-1">
+                      {lesson.title}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-heading font-bold text-foreground group-hover:text-primary transition-colors">
+                      {lesson.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {lesson.artist} · {lesson.date} · {(lesson.plays / 1000).toFixed(1)}k plays
+                    </p>
+                  </div>
+                  <PlayCircle size={28} className="text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
