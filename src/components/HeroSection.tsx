@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import heroCharacter from "@/assets/hero-character.png";
 import heroHeading from "@/assets/hero-heading.png";
 
