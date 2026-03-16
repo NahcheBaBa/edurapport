@@ -101,6 +101,34 @@ Waiyo,`,
         matchText: "Modify Adje' keeping it so clean",
         body: "Adverbs can modify adjectives — for example, 'very tall' where 'very' (adverb) modifies 'tall' (adjective). This is one of the key functions of adverbs beyond modifying verbs.",
       },
+      {
+        matchText: "more examples are that and them, those, and these",
+        body: "'That', 'them', 'those', and 'these' are demonstrative pronouns. They point to specific things. 'This/these' refer to things nearby, while 'that/those' refer to things farther away.",
+      },
+      {
+        matchText: "Verbs just tell what a noun does, that's just how it goes",
+        body: "This is the simplest definition of a verb — it describes the action a noun performs. Every complete sentence needs at least one verb. Without verbs, language would have no movement or action!",
+      },
+      {
+        matchText: "The flavour in the mix, They describe nouns, give language a fix",
+        body: "Adjectives are like seasoning in food — they add detail and color to nouns. Without adjectives, language would be bland: 'the dog' vs 'the big, fluffy, golden dog.' They make descriptions vivid!",
+      },
+      {
+        matchText: "e.g BOLDLY, LYRICALLY, opportunity no be wetin I go de look them pass, QUICKLY",
+        body: "BOLDLY, LYRICALLY, and QUICKLY are all adverbs ending in '-ly', which is the most common adverb suffix. The Pidgin English line 'opportunity no be wetin I go de look them pass' means 'opportunity is not something I'll let pass by' — and QUICKLY modifies how fast he seizes it!",
+      },
+      {
+        matchText: "they stick words together like Glue",
+        body: "Prepositions connect nouns or pronouns to other words in a sentence, showing relationships of time, place, or direction. Think of them as the glue holding sentence parts together: 'the book ON the table', 'she arrived BEFORE noon'.",
+      },
+      {
+        matchText: "they join clauses, and words in a spree",
+        body: "Conjunctions are the connectors of language. There are three types: coordinating (and, but, or), subordinating (because, although, when), and correlative (either...or, neither...nor). They let us build complex thoughts from simple ones!",
+      },
+      {
+        matchText: "Okay Before Abdullahi Interject, what is interjection?",
+        body: "An interjection is a word or phrase that expresses sudden emotion — like 'Wow!', 'Ouch!', or the Yoruba 'Waiyo!' that follows. The rapper cleverly uses a student's name (Abdullahi) with the verb 'interject' to introduce the concept. Interjections often stand alone and are followed by exclamation marks!",
+      },
     ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
     comments: [
