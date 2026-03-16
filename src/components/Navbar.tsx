@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
 { label: "Subjects", href: "#projects" },
 { label: "About us", href: "#about" },
-{ label: "Resources", href: "#resources" },
 { label: "Contact us", href: "#contact" }];
 
 
@@ -29,10 +28,17 @@ const Navbar = () => {
             key={l.label}
             href={l.href}
             className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
-            
               {l.label}
             </a>
           )}
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="h-9 w-40 rounded-full border border-input bg-background pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:w-56 transition-all"
+            />
+          </div>
         </div>
 
         <div className="hidden md:flex items-center gap-3">
