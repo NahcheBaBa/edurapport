@@ -1,3 +1,10 @@
+export interface LyricAnnotation {
+  /** Substring of the lyric line that triggers the annotation */
+  matchText: string;
+  /** The annotation body shown on click */
+  body: string;
+}
+
 export interface Lesson {
   id: string;
   subject: string;
@@ -8,7 +15,7 @@ export interface Lesson {
   date: string;
   plays: number;
   lyrics: string;
-  annotation?: string;
+  annotations: LyricAnnotation[];
   videoUrl?: string;
   videoCaption?: string;
   comments: Comment[];
@@ -77,8 +84,20 @@ Like branches to tree, like wetin join KIS and Me,
 
 Okay Before Abdullahi Interject, what is interjection?
 Waiyo,`,
-    annotation:
-      'EduRapport Annotations\n\nIn music, a "rat pack" can be used as a reference to describe any group of disorderly young people. Rat pack is also a group of entertainers from the 1960s and 50s. Members: Frank Sinatra, Dean Martin, Sammy Davis Jr., Peter Lawford, and Joey Bishop.',
+    annotations: [
+      {
+        matchText: "Whether concrete or abstract, you find them in words like Rat pack",
+        body: 'In music, a "rat pack" can be used as a reference to describe any group of disorderly young people. Rat pack is also a group of entertainers from the 1960s and 50s. Members: Frank Sinatra, Dean Martin, Sammy Davis Jr., Peter Lawford, and Joey Bishop.',
+      },
+      {
+        matchText: "Mr. Nah is He, Mrs. John is she, excuse me please",
+        body: "Pronouns replace nouns so we don't repeat them. 'He' replaces a male noun, 'She' replaces a female noun. This line demonstrates how pronouns work in everyday speech.",
+      },
+      {
+        matchText: "Modify Adje' keeping it so clean",
+        body: "Adverbs can modify adjectives — for example, 'very tall' where 'very' (adverb) modifies 'tall' (adjective). This is one of the key functions of adverbs beyond modifying verbs.",
+      },
+    ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
     comments: [
       {
@@ -111,7 +130,12 @@ Future tense coming, what's yet to be,
 I will walk, I will talk, just wait and see,
 Will and shall, gonna make it clear,
 The future is bright, the future is here.`,
-    annotation: "Tenses help us understand when an action takes place — past, present, or future.",
+    annotations: [
+      {
+        matchText: "Time is the essence, language is the suture",
+        body: "Tenses help us understand when an action takes place — past, present, or future. They are the 'suture' that stitches meaning to time.",
+      },
+    ],
     videoCaption: "Watch the video below to learn more about Tenses",
     comments: [],
   },
@@ -137,7 +161,12 @@ Mitochondria is the powerhouse, making ATP,
 Energy for the cell, powering you and me,
 Ribosomes make proteins, the endoplasmic reticulum too,
 Golgi apparatus packages, sending them through.`,
-    annotation: "The cell theory states that all living things are made of cells, cells are the basic unit of life, and all cells come from pre-existing cells.",
+    annotations: [
+      {
+        matchText: "The cell is the basic unit of life",
+        body: "The cell theory states that all living things are made of cells, cells are the basic unit of life, and all cells come from pre-existing cells.",
+      },
+    ],
     videoCaption: "Watch the video below to explore cell structures",
     comments: [],
   },
@@ -166,7 +195,12 @@ Third law: every action has a reaction,
 Equal and opposite in every interaction,
 Push a wall, it pushes back on you,
 Jump off a boat, the boat moves too.`,
-    annotation: "Newton's three laws of motion form the foundation of classical mechanics and describe the relationship between forces and motion.",
+    annotations: [
+      {
+        matchText: "First law: an object stays at rest or moves straight",
+        body: "Newton's first law, also called the Law of Inertia, states that an object will remain at rest or in uniform motion unless acted upon by an external force.",
+      },
+    ],
     videoCaption: "Watch the video below to see Newton's Laws in action",
     comments: [],
   },
