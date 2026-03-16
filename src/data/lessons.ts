@@ -195,7 +195,12 @@ Third law: every action has a reaction,
 Equal and opposite in every interaction,
 Push a wall, it pushes back on you,
 Jump off a boat, the boat moves too.`,
-    annotation: "Newton's three laws of motion form the foundation of classical mechanics and describe the relationship between forces and motion.",
+    annotations: [
+      {
+        matchText: "First law: an object stays at rest or moves straight",
+        body: "Newton's first law, also called the Law of Inertia, states that an object will remain at rest or in uniform motion unless acted upon by an external force.",
+      },
+    ],
     videoCaption: "Watch the video below to see Newton's Laws in action",
     comments: [],
   },
