@@ -94,6 +94,10 @@ Waiyo,`,
         body: "Pronouns replace nouns so we don't repeat them. 'He' replaces a male noun, 'She' replaces a female noun. This line demonstrates how pronouns work in everyday speech.",
       },
       {
+        matchText: "Action is the word, okay OBSERVE",
+        body: "Notice how the rapper uses the verb 'OBSERVE' in all caps — it's a double entendre. He's telling you to watch him perform (observe) while simultaneously using a verb as a live example of what a verb is. The word itself becomes the lesson!",
+      },
+      {
         matchText: "Modify Adje' keeping it so clean",
         body: "Adverbs can modify adjectives — for example, 'very tall' where 'very' (adverb) modifies 'tall' (adjective). This is one of the key functions of adverbs beyond modifying verbs.",
       },
