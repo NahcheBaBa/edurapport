@@ -84,8 +84,20 @@ Like branches to tree, like wetin join KIS and Me,
 
 Okay Before Abdullahi Interject, what is interjection?
 Waiyo,`,
-    annotation:
-      'EduRapport Annotations\n\nIn music, a "rat pack" can be used as a reference to describe any group of disorderly young people. Rat pack is also a group of entertainers from the 1960s and 50s. Members: Frank Sinatra, Dean Martin, Sammy Davis Jr., Peter Lawford, and Joey Bishop.',
+    annotations: [
+      {
+        matchText: "Whether concrete or abstract, you find them in words like Rat pack",
+        body: 'In music, a "rat pack" can be used as a reference to describe any group of disorderly young people. Rat pack is also a group of entertainers from the 1960s and 50s. Members: Frank Sinatra, Dean Martin, Sammy Davis Jr., Peter Lawford, and Joey Bishop.',
+      },
+      {
+        matchText: "Mr. Nah is He, Mrs. John is she, excuse me please",
+        body: "Pronouns replace nouns so we don't repeat them. 'He' replaces a male noun, 'She' replaces a female noun. This line demonstrates how pronouns work in everyday speech.",
+      },
+      {
+        matchText: "Modify Adje' keeping it so clean",
+        body: "Adverbs can modify adjectives — for example, 'very tall' where 'very' (adverb) modifies 'tall' (adjective). This is one of the key functions of adverbs beyond modifying verbs.",
+      },
+    ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
     comments: [
       {
