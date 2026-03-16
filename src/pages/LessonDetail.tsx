@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
+import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
 } from "lucide-react";
