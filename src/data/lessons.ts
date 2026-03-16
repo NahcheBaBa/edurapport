@@ -1,3 +1,10 @@
+export interface LyricAnnotation {
+  /** Substring of the lyric line that triggers the annotation */
+  matchText: string;
+  /** The annotation body shown on click */
+  body: string;
+}
+
 export interface Lesson {
   id: string;
   subject: string;
@@ -8,7 +15,7 @@ export interface Lesson {
   date: string;
   plays: number;
   lyrics: string;
-  annotation?: string;
+  annotations: LyricAnnotation[];
   videoUrl?: string;
   videoCaption?: string;
   comments: Comment[];
