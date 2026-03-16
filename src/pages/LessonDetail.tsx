@@ -134,37 +134,69 @@ const LessonDetail = () => {
               </div>
             </div>
 
-            {/* Content Row */}
+            {/* Content Row — Genius-style lyrics */}
             <div className="flex flex-col md:flex-row gap-6">
               {/* Lyrics */}
               <div className="flex-1">
-                <div className="whitespace-pre-line text-sm leading-relaxed text-foreground font-body">
+                <div className="text-sm leading-relaxed text-foreground font-body">
                   {lesson.lyrics.split("\n").map((line, i) => {
-                    // Highlight some lines with accent background
-                    const isHighlight = line.includes("Whether concrete") || line.includes("Mr. Nah") || line.includes("Modify Adje");
+                    const ann = annotationMap.get(i);
+                    const isActive = activeAnnotation === ann && ann != null;
+                    if (ann) {
+                      return (
+                        <div key={i} className="relative">
+                          <span
+                            onClick={() => setActiveAnnotation(isActive ? null : ann)}
+                            className={`cursor-pointer px-1 rounded transition-colors inline ${
+                              isActive
+                                ? "bg-primary/30 border-b-2 border-primary"
+                                : "bg-primary/15 hover:bg-primary/25 border-b-2 border-primary/40"
+                            }`}
+                          >
+                            {line}
+                          </span>
+                          {/* Inline annotation card (mobile) */}
+                          {isActive && (
+                            <div className="md:hidden mt-2 mb-3 bg-primary/10 border border-primary/30 rounded-xl p-4 text-xs text-foreground leading-relaxed animate-in fade-in-0 slide-in-from-top-2">
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="font-heading font-bold text-primary">EduRapport Annotations</h4>
+                                <button onClick={() => setActiveAnnotation(null)} className="text-muted-foreground hover:text-foreground">
+                                  <X size={14} />
+                                </button>
+                              </div>
+                              <p>{ann.body}</p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
                     return (
-                      <span key={i}>
-                        {isHighlight ? (
-                          <mark className="bg-primary/20 px-1 rounded">{line}</mark>
-                        ) : (
-                          line
-                        )}
-                        {"\n"}
-                      </span>
+                      <div key={i} className={line.trim() === "" ? "h-4" : ""}>
+                        {line}
+                      </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Annotation */}
-              {lesson.annotation && (
-                <div className="md:w-64 flex-shrink-0">
-                  <div className="bg-primary/10 border border-primary/30 rounded-xl p-4 text-xs text-foreground leading-relaxed sticky top-24">
-                    <h4 className="font-heading font-bold text-primary mb-2">EduRapport Annotations</h4>
-                    <p className="whitespace-pre-line">{lesson.annotation.replace("EduRapport Annotations\n\n", "")}</p>
+              {/* Annotation sidebar (desktop) — Genius-style sticky */}
+              <div className="hidden md:block md:w-72 flex-shrink-0">
+                {activeAnnotation ? (
+                  <div className="bg-primary/10 border border-primary/30 rounded-xl p-4 text-xs text-foreground leading-relaxed sticky top-24 animate-in fade-in-0 slide-in-from-right-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-heading font-bold text-primary">EduRapport Annotations</h4>
+                      <button onClick={() => setActiveAnnotation(null)} className="text-muted-foreground hover:text-foreground">
+                        <X size={14} />
+                      </button>
+                    </div>
+                    <p className="whitespace-pre-line">{activeAnnotation.body}</p>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="bg-muted/50 border border-border rounded-xl p-4 text-xs text-muted-foreground leading-relaxed sticky top-24">
+                    <p className="italic">Click a highlighted line to see its annotation.</p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Audio Player */}
