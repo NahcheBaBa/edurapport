@@ -161,7 +161,12 @@ Mitochondria is the powerhouse, making ATP,
 Energy for the cell, powering you and me,
 Ribosomes make proteins, the endoplasmic reticulum too,
 Golgi apparatus packages, sending them through.`,
-    annotation: "The cell theory states that all living things are made of cells, cells are the basic unit of life, and all cells come from pre-existing cells.",
+    annotations: [
+      {
+        matchText: "The cell is the basic unit of life",
+        body: "The cell theory states that all living things are made of cells, cells are the basic unit of life, and all cells come from pre-existing cells.",
+      },
+    ],
     videoCaption: "Watch the video below to explore cell structures",
     comments: [],
   },
