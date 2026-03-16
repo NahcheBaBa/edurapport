@@ -18,7 +18,20 @@ const LessonDetail = () => {
   const [comments, setComments] = useState(lesson?.comments || []);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [activeAnnotation, setActiveAnnotation] = useState<LyricAnnotation | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Build a map of which lines have annotations
+  const annotationMap = useMemo(() => {
+    const map = new Map<number, LyricAnnotation>();
+    if (!lesson) return map;
+    const lines = lesson.lyrics.split("\n");
+    for (const ann of lesson.annotations) {
+      const idx = lines.findIndex((l) => l.includes(ann.matchText));
+      if (idx !== -1) map.set(idx, ann);
+    }
+    return map;
+  }, [lesson]);
 
   if (!lesson) {
     return (
