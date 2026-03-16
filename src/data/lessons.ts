@@ -130,7 +130,12 @@ Future tense coming, what's yet to be,
 I will walk, I will talk, just wait and see,
 Will and shall, gonna make it clear,
 The future is bright, the future is here.`,
-    annotation: "Tenses help us understand when an action takes place — past, present, or future.",
+    annotations: [
+      {
+        matchText: "Time is the essence, language is the suture",
+        body: "Tenses help us understand when an action takes place — past, present, or future. They are the 'suture' that stitches meaning to time.",
+      },
+    ],
     videoCaption: "Watch the video below to learn more about Tenses",
     comments: [],
   },
