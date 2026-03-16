@@ -7,7 +7,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { getLessonById } from "@/data/lessons";
+import { getLessonById, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
 
 const LessonDetail = () => {
