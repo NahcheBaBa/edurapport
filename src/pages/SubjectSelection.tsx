@@ -12,6 +12,7 @@ const subjects = [
 { icon: Dna, label: "Biology" },
 { icon: Atom, label: "Physics" },
 { icon: FlaskConical, label: "Science" },
+{ icon: FlaskConical, label: "Chemistry" },
 { icon: Ruler, label: "Mathematics" },
 { icon: ScrollText, label: "Literature" },
 { icon: Landmark, label: "Government" },
