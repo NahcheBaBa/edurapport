@@ -4,7 +4,7 @@ const subjects = [
   { icon: BookOpen, label: "General Knowledge" },
   { icon: Atom, label: "Physics" },
   { icon: Brain, label: "Phonetics" },
-  { icon: FlaskConical, label: "Chemistry" },
+  { icon: FlaskConical, label: "Science" },
   { icon: Leaf, label: "Biology" },
   { icon: Calculator, label: "Mathematics" },
 ];
