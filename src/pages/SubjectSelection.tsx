@@ -11,7 +11,7 @@ const subjects = [
   { icon: BookOpen, label: "English" },
   { icon: Dna, label: "Biology" },
   { icon: Atom, label: "Physics" },
-  { icon: FlaskConical, label: "Chemistry" },
+  { icon: FlaskConical, label: "Science" },
   { icon: Palette, label: "Creative Art" },
   { icon: Ruler, label: "Mathematics" },
   { icon: ScrollText, label: "Literature" },
