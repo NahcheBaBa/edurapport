@@ -243,6 +243,101 @@ Jump off a boat, the boat moves too.`,
     videoCaption: "Watch the video below to see Newton's Laws in action",
     comments: [],
   },
+  {
+    id: "algebra",
+    subject: "Mathematics",
+    title: "ALGEBRA",
+    artist: "Ict Natche",
+    producer: "Feshie",
+    date: "24 April 2024",
+    plays: 8700,
+    lyrics: `Pay no mind to the language cos already,
+The world speaks in riddles. In buying Gari for Eba,
+You needed an "unknown amount" of mudu for 10 people,
+Each can consume 2 wraps; we won't even go into the soup.
+That too is a "sauce of mystery" like a Van Herring on Mystique.
+The perfect measure remains a frustrating tape worm,
+Like if 1 mudu is 150 naira, how much would 12 mudu cost?
+That Question Mark seems hard to stomach, hook and crook.
+But then came Algebra. It gifted us with letters like Ron does,
+"X" was ready to stand in for that "unknown amount"
+Reveal hidden values, using what's known to find the unknown,
+But the easier question to stomach is how does learning
+Algebra help solve my personal problems in real life?
+It was this same question that made me to think Math,
+But I eventually find the answers whenever I do the Math.
+Do the Math. Add, subtract, multiply, and divide, you'll
+See how those Ops like tools helped build our understanding.
+3x + 3 = another, punching with "x" meaning pieces denoted as "x" again!
+The challenge is to find the elusive "x." I began to try my Shaor luck.
+A Calculative detective sifting through clues, balancing scales
+Of knowledge, isolating the variable culprit! Is it really equal to?
+To keep the balance I treat each sides equally, impartial as Judge Falana.
+This just means I am old enough to know my left from my right.
+Eureka! Now x becomes 2 in 3x +2 = 5, check that by just substituting
+But Algebra's magic extended far beyond simple equations,
+You may be presented with a situation in which Kasham's brother
+Has twice as many A's as Kasham. Given that both together have T A's.
+Na here we go ask how you go take know how many A's Kasyr get.
+Algebra is like that playful lady Justice, she compares quantities.
+She holds the scales to balance "greater than" or "less than."
+Alphabets is just them as the ultimate gold standard.
+She leads the input by the hand, transforming it into an elegant output.
+Almighty formula became that giant superhero that packed a punch.
+The world, once fractals of unknowns, began to crystallize.
+We could calculate the perfect number of space to house so many tiles,
+And even unlock the secrets of music, with its harmonious ratios hidden in plain sight.
+This journey, however, isn't for the faint of heart but we can bear it.
+Algebra, transformed the world from a place of unknowns to fractals of patterns.
+Waiting to be unraveled, one equation, one variable, one beautiful solution at a time.`,
+    annotations: [
+      {
+        matchText: "That too is a \"sauce of mystery\" like a Van Herring on Mystique",
+        body: "A playful metaphor comparing algebraic unknowns to a \"sauce of mystery.\" The reference to Van Herring on Mystique plays on the idea of red herrings — misleading clues — and the X-Men character Mystique, who can take any form, just like the variable \"x\" can represent any value.",
+      },
+      {
+        matchText: "\"X\" was ready to stand in for that \"unknown amount\"",
+        body: "In algebra, letters like x, y, and z are used as variables to represent unknown values. This convention was popularized by René Descartes in the 17th century. The variable \"x\" is the most commonly used letter in algebra.",
+      },
+      {
+        matchText: "See how those Ops like tools helped build our understanding",
+        body: "\"Ops\" refers to mathematical operations: addition (+), subtraction (−), multiplication (×), and division (÷). These are the fundamental tools of algebra that allow us to manipulate equations and solve for unknowns.",
+      },
+      {
+        matchText: "A Calculative detective sifting through clues, balancing scales",
+        body: "Solving algebra is like detective work — you gather clues (known values), balance the equation (keep both sides equal), and isolate the variable to find the answer. The \"scales\" metaphor emphasizes that whatever you do to one side, you must do to the other.",
+      },
+      {
+        matchText: "Eureka! Now x becomes 2 in 3x +2 = 5, check that by just substituting",
+        body: "To solve 3x + 2 = 5: subtract 2 from both sides → 3x = 3, then divide by 3 → x = 1. You verify by substituting back: 3(1) + 2 = 5 ✓. Note: the lyric says x = 2, but the correct solution is x = 1. Always check your work!",
+      },
+      {
+        matchText: "Algebra, transformed the world from a place of unknowns to fractals of patterns",
+        body: "Fractals are infinitely repeating patterns found in nature and mathematics. Algebra provides the equations that generate these patterns. The Mandelbrot set, one of the most famous fractals, is generated by the simple equation z = z² + c.",
+      },
+    ],
+    designArtCards: [
+      {
+        image: "/assets/fractal-art.jpg",
+        title: "Fractals & Art",
+        description: "Fractals, those infinitely detailed self-similar patterns, are a fascinating bridge between math and art. Algebra plays a starring role in their creation. Artists like Vincent Van Gogh & Jackson Pollock all used and applied Fractals...",
+      },
+      {
+        image: "/assets/web-design-math.jpg",
+        title: "Web Design",
+        description: "Algebra plays a foundational role in responsive design techniques. While you won't be solving complex equations, the underlying principles of proportions, relationships between elements...",
+      },
+    ],
+    videoCaption: "Watch the video below to understand more about Algebra",
+    comments: [
+      {
+        id: "1",
+        author: "Dan",
+        text: "Easily the most relatable poem out there. I like how you use local examples.",
+        timeAgo: "1 month ago",
+      },
+    ],
+  },
 ];
 
 export function getLessonsForSubject(subject: string): Lesson[] {
