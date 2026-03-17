@@ -9,6 +9,13 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getLessonById, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
+import fractalArt from "@/assets/fractal-art.jpg";
+import webDesignMath from "@/assets/web-design-math.jpg";
+
+const cardImageMap: Record<string, string> = {
+  "/assets/fractal-art.jpg": fractalArt,
+  "/assets/web-design-math.jpg": webDesignMath,
+};
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
