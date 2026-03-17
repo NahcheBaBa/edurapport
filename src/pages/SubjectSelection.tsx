@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
-  BookOpen, Dna, Atom, FlaskConical, Palette,
+  BookOpen, Dna, Atom, FlaskConical, Beaker, Palette,
   Ruler, ScrollText, Landmark, Heart, Globe } from
 "lucide-react";
 
