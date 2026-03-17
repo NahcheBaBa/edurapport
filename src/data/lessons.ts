@@ -5,6 +5,12 @@ export interface LyricAnnotation {
   body: string;
 }
 
+export interface DesignArtCard {
+  image: string;
+  title: string;
+  description: string;
+}
+
 export interface Lesson {
   id: string;
   subject: string;
@@ -16,6 +22,7 @@ export interface Lesson {
   plays: number;
   lyrics: string;
   annotations: LyricAnnotation[];
+  designArtCards?: DesignArtCard[];
   videoUrl?: string;
   videoCaption?: string;
   comments: Comment[];
