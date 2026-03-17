@@ -9,6 +9,13 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getLessonById, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
+import fractalArt from "@/assets/fractal-art.jpg";
+import webDesignMath from "@/assets/web-design-math.jpg";
+
+const cardImageMap: Record<string, string> = {
+  "/assets/fractal-art.jpg": fractalArt,
+  "/assets/web-design-math.jpg": webDesignMath,
+};
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -243,6 +250,31 @@ const LessonDetail = () => {
                 <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
                   <Eye size={14} />
                   <span>1.5k views</span>
+                </div>
+              </div>
+            )}
+
+            {/* Design & Art Cards */}
+            {lesson.designArtCards && lesson.designArtCards.length > 0 && (
+              <div className="mt-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {lesson.designArtCards.map((card, i) => (
+                    <div key={i} className="bg-muted rounded-2xl overflow-hidden group">
+                      <div className="aspect-[4/3] overflow-hidden">
+                        <img
+                          src={cardImageMap[card.image] || card.image}
+                          alt={card.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <p className="text-sm text-foreground leading-relaxed">
+                          {card.description}
+                          <button className="text-primary font-semibold ml-1 hover:underline">Read More</button>
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
