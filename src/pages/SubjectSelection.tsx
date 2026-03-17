@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
-  BookOpen, Dna, Atom, FlaskConical, Palette,
+  BookOpen, Dna, Atom, FlaskConical, Beaker, Palette,
   Ruler, ScrollText, Landmark, Heart, Globe } from
 "lucide-react";
 
@@ -12,7 +12,7 @@ const subjects = [
 { icon: Dna, label: "Biology" },
 { icon: Atom, label: "Physics" },
 { icon: FlaskConical, label: "Science" },
-{ icon: FlaskConical, label: "Chemistry" },
+{ icon: Beaker, label: "Chemistry" },
 { icon: Ruler, label: "Mathematics" },
 { icon: ScrollText, label: "Literature" },
 { icon: Landmark, label: "Government" },
