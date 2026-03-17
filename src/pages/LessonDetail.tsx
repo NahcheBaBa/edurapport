@@ -254,6 +254,31 @@ const LessonDetail = () => {
               </div>
             )}
 
+            {/* Design & Art Cards */}
+            {lesson.designArtCards && lesson.designArtCards.length > 0 && (
+              <div className="mt-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {lesson.designArtCards.map((card, i) => (
+                    <div key={i} className="bg-muted rounded-2xl overflow-hidden group">
+                      <div className="aspect-[4/3] overflow-hidden">
+                        <img
+                          src={cardImageMap[card.image] || card.image}
+                          alt={card.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <p className="text-sm text-foreground leading-relaxed">
+                          {card.description}
+                          <button className="text-primary font-semibold ml-1 hover:underline">Read More</button>
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Quiz CTA */}
             <div className="mt-10 text-center">
               <Button className="gradient-primary text-primary-foreground font-heading font-bold rounded-full px-10 py-3 text-sm uppercase tracking-wider">
