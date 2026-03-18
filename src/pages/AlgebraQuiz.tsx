@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX, ChevronLeft, ChevronRight, Trophy, RotateCcw } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import JigsawPuzzle from "@/components/quiz/JigsawPuzzle";
 import QuizQuestionComponent from "@/components/quiz/QuizQuestion";
 import { algebraQuizQuestions } from "@/data/quizQuestions";
+import { useSpeech } from "@/hooks/use-speech";
 
 const TOTAL_QUESTIONS = algebraQuizQuestions.length;
 
@@ -15,6 +16,7 @@ const AlgebraQuiz = () => {
   const [answers, setAnswers] = useState<Map<number, number>>(new Map());
   const [revealedPieces, setRevealedPieces] = useState<Set<number>>(new Set());
   const [audioOn, setAudioOn] = useState(false);
+  const { speak, stop, isSpeaking } = useSpeech();
 
   const correctCount = revealedPieces.size;
   const allAnswered = answers.size === TOTAL_QUESTIONS;
@@ -45,7 +47,26 @@ const AlgebraQuiz = () => {
     setCurrentQuestion(0);
     setAnswers(new Map());
     setRevealedPieces(new Set());
+    stop();
+    setAudioOn(false);
   };
+
+  // Read question aloud when audioOn changes or question changes
+  const readCurrentQuestion = useCallback(() => {
+    const q = algebraQuizQuestions[currentQuestion];
+    const text = `Question ${q.id}. ${q.question}. Options: ${q.options
+      .map((o, i) => `${["A", "B", "C", "D"][i]}, ${o}`)
+      .join(". ")}`;
+    speak(text);
+  }, [currentQuestion, speak]);
+
+  useEffect(() => {
+    if (audioOn) {
+      readCurrentQuestion();
+    } else {
+      stop();
+    }
+  }, [audioOn, currentQuestion]); // intentionally omit readCurrentQuestion/stop to avoid loops
 
   const question = algebraQuizQuestions[currentQuestion];
   const currentAnswer = answers.get(question.id) ?? null;
@@ -76,10 +97,14 @@ const AlgebraQuiz = () => {
             </div>
             <button
               onClick={() => setAudioOn(!audioOn)}
-              className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors self-start"
+              className={`flex items-center gap-2 text-sm font-semibold transition-colors self-start ${
+                audioOn
+                  ? "text-primary"
+                  : "text-foreground hover:text-primary"
+              }`}
             >
-              {audioOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-              {audioOn ? "Sound On" : "Listen to Quiz"}
+              {audioOn ? <Volume2 size={18} className={isSpeaking ? "animate-pulse" : ""} /> : <VolumeX size={18} />}
+              {audioOn ? (isSpeaking ? "Reading..." : "Sound On") : "Listen to Quiz"}
             </button>
           </div>
 
