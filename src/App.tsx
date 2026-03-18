@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import SubjectSelection from "./pages/SubjectSelection.tsx";
 import SubjectDetail from "./pages/SubjectDetail.tsx";
 import LessonDetail from "./pages/LessonDetail.tsx";
+import AlgebraQuiz from "./pages/AlgebraQuiz.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/subjects" element={<SubjectSelection />} />
           <Route path="/subjects/:name" element={<SubjectDetail />} />
           <Route path="/lessons/:lessonId" element={<LessonDetail />} />
+          <Route path="/quiz/algebra" element={<AlgebraQuiz />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

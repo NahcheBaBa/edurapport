@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
@@ -281,9 +281,11 @@ const LessonDetail = () => {
 
             {/* Quiz CTA */}
             <div className="mt-10 text-center">
-              <Button className="gradient-primary text-primary-foreground font-heading font-bold rounded-full px-10 py-3 text-sm uppercase tracking-wider">
-                Take a Quiz and Earn NNCs
-              </Button>
+              <Link to={lesson.id === "algebra" ? "/quiz/algebra" : "#"}>
+                <Button className="gradient-primary text-primary-foreground font-heading font-bold rounded-full px-10 py-3 text-sm uppercase tracking-wider">
+                  Take a Quiz and Earn NNCs
+                </Button>
+              </Link>
             </div>
 
             {/* Comments */}
