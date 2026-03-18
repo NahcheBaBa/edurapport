@@ -47,7 +47,26 @@ const AlgebraQuiz = () => {
     setCurrentQuestion(0);
     setAnswers(new Map());
     setRevealedPieces(new Set());
+    stop();
+    setAudioOn(false);
   };
+
+  // Read question aloud when audioOn changes or question changes
+  const readCurrentQuestion = useCallback(() => {
+    const q = algebraQuizQuestions[currentQuestion];
+    const text = `Question ${q.id}. ${q.question}. Options: ${q.options
+      .map((o, i) => `${["A", "B", "C", "D"][i]}, ${o}`)
+      .join(". ")}`;
+    speak(text);
+  }, [currentQuestion, speak]);
+
+  useEffect(() => {
+    if (audioOn) {
+      readCurrentQuestion();
+    } else {
+      stop();
+    }
+  }, [audioOn, currentQuestion]); // intentionally omit readCurrentQuestion/stop to avoid loops
 
   const question = algebraQuizQuestions[currentQuestion];
   const currentAnswer = answers.get(question.id) ?? null;
