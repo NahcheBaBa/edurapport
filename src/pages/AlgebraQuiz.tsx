@@ -97,10 +97,14 @@ const AlgebraQuiz = () => {
             </div>
             <button
               onClick={() => setAudioOn(!audioOn)}
-              className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors self-start"
+              className={`flex items-center gap-2 text-sm font-semibold transition-colors self-start ${
+                audioOn
+                  ? "text-primary"
+                  : "text-foreground hover:text-primary"
+              }`}
             >
-              {audioOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-              {audioOn ? "Sound On" : "Listen to Quiz"}
+              {audioOn ? <Volume2 size={18} className={isSpeaking ? "animate-pulse" : ""} /> : <VolumeX size={18} />}
+              {audioOn ? (isSpeaking ? "Reading..." : "Sound On") : "Listen to Quiz"}
             </button>
           </div>
 
