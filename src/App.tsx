@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import SubjectSelection from "./pages/SubjectSelection.tsx";
 import SubjectDetail from "./pages/SubjectDetail.tsx";
 import LessonDetail from "./pages/LessonDetail.tsx";
+import AlgebraQuiz from "./pages/AlgebraQuiz.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
