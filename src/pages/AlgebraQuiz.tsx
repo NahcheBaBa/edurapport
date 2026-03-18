@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Volume2, VolumeX, ChevronLeft, ChevronRight, Trophy, RotateCcw } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import JigsawPuzzle from "@/components/quiz/JigsawPuzzle";
 import QuizQuestionComponent from "@/components/quiz/QuizQuestion";
 import { algebraQuizQuestions } from "@/data/quizQuestions";
+import { useSpeech } from "@/hooks/use-speech";
 
 const TOTAL_QUESTIONS = algebraQuizQuestions.length;
 
