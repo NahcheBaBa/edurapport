@@ -2,6 +2,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 export function useSpeech() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [rate, setRate] = useState(0.9);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const stop = useCallback(() => {
@@ -13,7 +14,7 @@ export function useSpeech() {
     (text: string) => {
       stop();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
+      utterance.rate = rate;
       utterance.pitch = 1;
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -21,7 +22,7 @@ export function useSpeech() {
       setIsSpeaking(true);
       window.speechSynthesis.speak(utterance);
     },
-    [stop]
+    [stop, rate]
   );
 
   useEffect(() => {
@@ -30,5 +31,5 @@ export function useSpeech() {
     };
   }, []);
 
-  return { speak, stop, isSpeaking };
+  return { speak, stop, isSpeaking, rate, setRate };
 }
