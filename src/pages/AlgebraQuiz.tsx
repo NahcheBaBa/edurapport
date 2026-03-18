@@ -16,7 +16,7 @@ const AlgebraQuiz = () => {
   const [answers, setAnswers] = useState<Map<number, number>>(new Map());
   const [revealedPieces, setRevealedPieces] = useState<Set<number>>(new Set());
   const [audioOn, setAudioOn] = useState(false);
-  const { speak, stop, isSpeaking } = useSpeech();
+  const { speak, stop, isSpeaking, rate, setRate } = useSpeech();
 
   const correctCount = revealedPieces.size;
   const allAnswered = answers.size === TOTAL_QUESTIONS;
@@ -95,17 +95,33 @@ const AlgebraQuiz = () => {
                 Answer correctly to unlock pieces of the hidden artwork!
               </p>
             </div>
-            <button
-              onClick={() => setAudioOn(!audioOn)}
-              className={`flex items-center gap-2 text-sm font-semibold transition-colors self-start ${
-                audioOn
-                  ? "text-primary"
-                  : "text-foreground hover:text-primary"
-              }`}
-            >
-              {audioOn ? <Volume2 size={18} className={isSpeaking ? "animate-pulse" : ""} /> : <VolumeX size={18} />}
-              {audioOn ? (isSpeaking ? "Reading..." : "Sound On") : "Listen to Quiz"}
-            </button>
+            <div className="flex flex-col items-end gap-2 self-start">
+              <button
+                onClick={() => setAudioOn(!audioOn)}
+                className={`flex items-center gap-2 text-sm font-semibold transition-colors ${
+                  audioOn ? "text-primary" : "text-foreground hover:text-primary"
+                }`}
+              >
+                {audioOn ? <Volume2 size={18} className={isSpeaking ? "animate-pulse" : ""} /> : <VolumeX size={18} />}
+                {audioOn ? (isSpeaking ? "Reading..." : "Sound On") : "Listen to Quiz"}
+              </button>
+              {audioOn && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>🐢</span>
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={1.5}
+                    step={0.1}
+                    value={rate}
+                    onChange={(e) => setRate(parseFloat(e.target.value))}
+                    className="w-24 h-1.5 accent-primary cursor-pointer"
+                  />
+                  <span>🐇</span>
+                  <span className="font-semibold text-foreground w-8">{rate}x</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Main grid */}
