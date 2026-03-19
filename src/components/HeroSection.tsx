@@ -41,7 +41,7 @@ const HeroSection = () => {
           isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`
           }>
           
-          <img src={heroHeading} alt="Your One-stop for Learning the Easy Way" className="max-w-xs md:max-w-md lg:max-w-lg w-full" />
+          <img src={heroHeading} alt="Your One-stop for Learning the Easy Way" className="max-w-xs md:max-w-md lg:max-w-lg w-full object-cover text-right" />
           <div className="flex flex-wrap gap-4 mt-8 justify-center md:justify-start">
             <Link
               to="/subjects"
