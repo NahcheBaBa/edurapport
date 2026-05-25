@@ -258,56 +258,111 @@ const LessonDetail = () => {
             </div>
 
             {/* Audio Player */}
-            <div className="mt-8 bg-muted rounded-2xl p-4 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
-                <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
-                  {lesson.title.split(" ").slice(0, 2).join("\n")}
+            <div className="mt-8 bg-muted rounded-2xl p-4 space-y-3">
+              {/* Top row — controls */}
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-1">
+                  <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
+                    {lesson.title.split(" ").slice(1, 3).join("\n")}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-heading font-semibold text-foreground truncate">
+                    {lesson.title}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground truncate">{lesson.artist}</p>
+                </div>
+
+                {/* Prev */}
+                <button
+                  onClick={handlePrev}
+                  disabled={!prevLesson}
+                  title={prevLesson ? `Previous: ${prevLesson.title}` : "No previous lesson"}
+                  className="text-foreground hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <SkipBack size={20} />
+                </button>
+
+                {/* Play / Pause */}
+                <button
+                  onClick={togglePlay}
+                  disabled={!audioSrc}
+                  className="text-foreground hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {isPlaying ? <Pause size={28} /> : <Play size={28} />}
+                </button>
+
+                {/* Next */}
+                <button
+                  onClick={handleNext}
+                  disabled={!nextLesson}
+                  title={nextLesson ? `Next: ${nextLesson.title}` : "No next lesson"}
+                  className="text-foreground hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <SkipForward size={20} />
+                </button>
+
+                {/* Speed */}
+                <button
+                  onClick={cyclePlaybackRate}
+                  title={`Playback speed: ${playbackRate}x`}
+                  className="flex items-center gap-0.5 text-[10px] font-bold text-foreground hover:text-primary transition-colors bg-background/60 rounded-md px-1.5 py-0.5"
+                >
+                  <Gauge size={14} />
+                  {playbackRate}x
+                </button>
+
+                {/* Loop */}
+                <button
+                  onClick={toggleLoop}
+                  title={isLooping ? "Loop on" : "Loop off"}
+                  className={`transition-colors ${isLooping ? "text-primary" : "text-foreground hover:text-primary"}`}
+                >
+                  {isLooping ? <Repeat1 size={20} /> : <Repeat size={20} />}
+                </button>
+
+                {/* Like */}
+                <button onClick={() => setLiked(!liked)} className="transition-colors">
+                  <Heart
+                    size={22}
+                    className={liked ? "fill-accent text-accent" : "text-muted-foreground"}
+                  />
+                </button>
+              </div>
+
+              {/* Bottom row — progress */}
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-muted-foreground tabular-nums w-8 text-right">
+                  {formatTime(currentTime)}
                 </span>
-              </div>
-              <div className="flex-1">
-                <p className="text-xs font-heading font-semibold text-foreground">{lesson.title}</p>
-                <p className="text-[10px] text-muted-foreground">{lesson.artist}</p>
-              </div>
-              <button
-                onClick={togglePlay}
-                disabled={!audioSrc}
-                className="text-foreground hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {isPlaying ? <Pause size={28} /> : <Play size={28} />}
-              </button>
-              <div className="flex-1 hidden sm:block">
                 <div
                   onClick={seek}
-                  className="relative h-1.5 bg-border rounded-full overflow-hidden cursor-pointer"
+                  className="relative h-1.5 bg-border rounded-full overflow-hidden cursor-pointer flex-1"
                 >
                   <div
-                    className="absolute inset-y-0 left-0 gradient-primary rounded-full"
+                    className="absolute inset-y-0 left-1 gradient-primary rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
+                <span className="text-[10px] text-muted-foreground tabular-nums w-8">
+                  {audioSrc ? formatTime(Math.max(duration - currentTime, 0)) : "0:00"}
+                </span>
               </div>
-              <span className="text-xs text-muted-foreground hidden sm:block tabular-nums">
-                {audioSrc
-                  ? `-${formatTime(Math.max(duration - currentTime, 0))}`
-                  : "-4:25"}
-              </span>
-              <button onClick={() => setLiked(!liked)} className="transition-colors">
-                <Heart
-                  size={22}
-                  className={liked ? "fill-accent text-accent" : "text-muted-foreground"}
-                />
-              </button>
+
               {audioSrc && (
                 <audio
                   ref={audioRef}
                   src={audioSrc}
                   preload="metadata"
+                  loop={isLooping}
                   onPlay={() => setIsPlaying(true)}
                   onPause={() => setIsPlaying(false)}
                   onEnded={() => {
-                    setIsPlaying(false);
-                    setProgress(0);
-                    setCurrentTime(0);
+                    if (!isLooping) {
+                      setIsPlaying(false);
+                      setProgress(0);
+                      setCurrentTime(0);
+                    }
                   }}
                   onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
                   onTimeUpdate={(e) => {
