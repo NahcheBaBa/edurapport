@@ -11,11 +11,17 @@ import { getLessonById, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
 import fractalArt from "@/assets/fractal-art.jpg";
 import webDesignMath from "@/assets/web-design-math.jpg";
+import partsOfSpeechAudio from "@/assets/parts-of-speech.mp3";
 
 const cardImageMap: Record<string, string> = {
   "/assets/fractal-art.jpg": fractalArt,
   "/assets/web-design-math.jpg": webDesignMath,
 };
+
+const lessonAudioMap: Record<string, string> = {
+  "parts-of-speech": partsOfSpeechAudio,
+};
+
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -25,8 +31,12 @@ const LessonDetail = () => {
   const [comments, setComments] = useState(lesson?.comments || []);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [activeAnnotation, setActiveAnnotation] = useState<LyricAnnotation | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
+
 
   // Build a map of which lines have annotations
   const annotationMap = useMemo(() => {
@@ -58,23 +68,30 @@ const LessonDetail = () => {
   }
 
   const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
     if (isPlaying) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      setIsPlaying(false);
+      audio.pause();
     } else {
-      setIsPlaying(true);
-      intervalRef.current = setInterval(() => {
-        setProgress((p) => {
-          if (p >= 100) {
-            if (intervalRef.current) clearInterval(intervalRef.current);
-            setIsPlaying(false);
-            return 0;
-          }
-          return p + 0.5;
-        });
-      }, 200);
+      audio.play();
     }
   };
+
+  const formatTime = (s: number) => {
+    if (!isFinite(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
+
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * duration;
+  };
+
 
   const addComment = () => {
     if (!commentText.trim()) return;
@@ -217,25 +234,57 @@ const LessonDetail = () => {
                 <p className="text-xs font-heading font-semibold text-foreground">{lesson.title}</p>
                 <p className="text-[10px] text-muted-foreground">{lesson.artist}</p>
               </div>
-              <button onClick={togglePlay} className="text-foreground hover:text-primary transition-colors">
+              <button
+                onClick={togglePlay}
+                disabled={!audioSrc}
+                className="text-foreground hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
                 {isPlaying ? <Pause size={28} /> : <Play size={28} />}
               </button>
               <div className="flex-1 hidden sm:block">
-                <div className="relative h-1.5 bg-border rounded-full overflow-hidden">
+                <div
+                  onClick={seek}
+                  className="relative h-1.5 bg-border rounded-full overflow-hidden cursor-pointer"
+                >
                   <div
-                    className="absolute inset-y-0 left-0 gradient-primary rounded-full transition-all"
+                    className="absolute inset-y-0 left-0 gradient-primary rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>
-              <span className="text-xs text-muted-foreground hidden sm:block">-4:25</span>
+              <span className="text-xs text-muted-foreground hidden sm:block tabular-nums">
+                {audioSrc
+                  ? `-${formatTime(Math.max(duration - currentTime, 0))}`
+                  : "-4:25"}
+              </span>
               <button onClick={() => setLiked(!liked)} className="transition-colors">
                 <Heart
                   size={22}
                   className={liked ? "fill-accent text-accent" : "text-muted-foreground"}
                 />
               </button>
+              {audioSrc && (
+                <audio
+                  ref={audioRef}
+                  src={audioSrc}
+                  preload="metadata"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => {
+                    setIsPlaying(false);
+                    setProgress(0);
+                    setCurrentTime(0);
+                  }}
+                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                  onTimeUpdate={(e) => {
+                    const t = e.currentTarget.currentTime;
+                    setCurrentTime(t);
+                    setProgress(duration ? (t / duration) * 100 : 0);
+                  }}
+                />
+              )}
             </div>
+
 
             {/* Video Section */}
             {lesson.videoCaption && (

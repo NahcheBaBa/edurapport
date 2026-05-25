@@ -25,7 +25,9 @@ export interface Lesson {
   designArtCards?: DesignArtCard[];
   videoUrl?: string;
   videoCaption?: string;
+  audioUrl?: string;
   comments: Comment[];
+
 }
 
 export interface Comment {
@@ -138,6 +140,8 @@ Waiyo,`,
       },
     ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
+    audioUrl: "/src/assets/parts-of-speech.mp3",
+
     comments: [
       {
         id: "1",
