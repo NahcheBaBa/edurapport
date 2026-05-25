@@ -3,11 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
+  SkipBack, SkipForward, Repeat, Repeat1, Gauge,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { getLessonById, LyricAnnotation } from "@/data/lessons";
+import { getLessonById, getLessonsForSubject, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
 import fractalArt from "@/assets/fractal-art.jpg";
 import webDesignMath from "@/assets/web-design-math.jpg";
