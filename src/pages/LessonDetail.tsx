@@ -45,7 +45,7 @@ const LessonDetail = () => {
   // Next / previous lessons within the same subject
   const subjectLessons = lesson ? getLessonsForSubject(lesson.subject) : [];
   const currentIndex = lesson ? subjectLessons.findIndex((l) => l.id === lesson.id) : -1;
-  const prevLesson = currentIndex > 1 ? subjectLessons[currentIndex - 1] : null;
+  const prevLesson = currentIndex > 0 ? subjectLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex !== -1 && currentIndex < subjectLessons.length - 1 ? subjectLessons[currentIndex + 1] : null;
 
 
