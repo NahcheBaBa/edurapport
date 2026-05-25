@@ -103,6 +103,29 @@ const LessonDetail = () => {
     audio.currentTime = pct * duration;
   };
 
+  const handlePrev = () => {
+    if (prevLesson) navigate(`/lesson/${prevLesson.id}`);
+  };
+
+  const handleNext = () => {
+    if (nextLesson) navigate(`/lesson/${nextLesson.id}`);
+  };
+
+  const toggleLoop = () => {
+    const audio = audioRef.current;
+    if (audio) audio.loop = !isLooping;
+    setIsLooping((prev) => !prev);
+  };
+
+  const cyclePlaybackRate = () => {
+    const rates = [0.75, 1, 1.25, 1.5];
+    const idx = rates.indexOf(playbackRate);
+    const nextRate = rates[(idx + 1) % rates.length];
+    const audio = audioRef.current;
+    if (audio) audio.playbackRate = nextRate;
+    setPlaybackRate(nextRate);
+  };
+
 
   const addComment = () => {
     if (!commentText.trim()) return;
