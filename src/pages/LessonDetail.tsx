@@ -68,23 +68,30 @@ const LessonDetail = () => {
   }
 
   const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
     if (isPlaying) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      setIsPlaying(false);
+      audio.pause();
     } else {
-      setIsPlaying(true);
-      intervalRef.current = setInterval(() => {
-        setProgress((p) => {
-          if (p >= 100) {
-            if (intervalRef.current) clearInterval(intervalRef.current);
-            setIsPlaying(false);
-            return 0;
-          }
-          return p + 0.5;
-        });
-      }, 200);
+      audio.play();
     }
   };
+
+  const formatTime = (s: number) => {
+    if (!isFinite(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  };
+
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * duration;
+  };
+
 
   const addComment = () => {
     if (!commentText.trim()) return;
