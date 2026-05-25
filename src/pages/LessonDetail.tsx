@@ -35,8 +35,18 @@ const LessonDetail = () => {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [activeAnnotation, setActiveAnnotation] = useState<LyricAnnotation | null>(null);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [isLooping, setIsLooping] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
+
+  const navigate = useNavigate();
+
+  // Next / previous lessons within the same subject
+  const subjectLessons = lesson ? getLessonsForSubject(lesson.subject) : [];
+  const currentIndex = lesson ? subjectLessons.findIndex((l) => l.id === lesson.id) : -1;
+  const prevLesson = currentIndex > 1 ? subjectLessons[currentIndex - 1] : null;
+  const nextLesson = currentIndex !== -1 && currentIndex < subjectLessons.length - 1 ? subjectLessons[currentIndex + 1] : null;
 
 
   // Build a map of which lines have annotations
