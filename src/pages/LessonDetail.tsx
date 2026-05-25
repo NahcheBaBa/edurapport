@@ -340,7 +340,7 @@ const LessonDetail = () => {
                   className="relative h-1.5 bg-border rounded-full overflow-hidden cursor-pointer flex-1"
                 >
                   <div
-                    className="absolute inset-y-0 left-1 gradient-primary rounded-full"
+                    className="absolute inset-y-0 left-0 gradient-primary rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
