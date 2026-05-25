@@ -140,6 +140,8 @@ Waiyo,`,
       },
     ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
+    audioUrl: "/src/assets/parts-of-speech.mp3",
+
     comments: [
       {
         id: "1",
