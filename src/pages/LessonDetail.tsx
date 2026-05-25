@@ -234,25 +234,57 @@ const LessonDetail = () => {
                 <p className="text-xs font-heading font-semibold text-foreground">{lesson.title}</p>
                 <p className="text-[10px] text-muted-foreground">{lesson.artist}</p>
               </div>
-              <button onClick={togglePlay} className="text-foreground hover:text-primary transition-colors">
+              <button
+                onClick={togglePlay}
+                disabled={!audioSrc}
+                className="text-foreground hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
                 {isPlaying ? <Pause size={28} /> : <Play size={28} />}
               </button>
               <div className="flex-1 hidden sm:block">
-                <div className="relative h-1.5 bg-border rounded-full overflow-hidden">
+                <div
+                  onClick={seek}
+                  className="relative h-1.5 bg-border rounded-full overflow-hidden cursor-pointer"
+                >
                   <div
-                    className="absolute inset-y-0 left-0 gradient-primary rounded-full transition-all"
+                    className="absolute inset-y-0 left-0 gradient-primary rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>
-              <span className="text-xs text-muted-foreground hidden sm:block">-4:25</span>
+              <span className="text-xs text-muted-foreground hidden sm:block tabular-nums">
+                {audioSrc
+                  ? `-${formatTime(Math.max(duration - currentTime, 0))}`
+                  : "-4:25"}
+              </span>
               <button onClick={() => setLiked(!liked)} className="transition-colors">
                 <Heart
                   size={22}
                   className={liked ? "fill-accent text-accent" : "text-muted-foreground"}
                 />
               </button>
+              {audioSrc && (
+                <audio
+                  ref={audioRef}
+                  src={audioSrc}
+                  preload="metadata"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => {
+                    setIsPlaying(false);
+                    setProgress(0);
+                    setCurrentTime(0);
+                  }}
+                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                  onTimeUpdate={(e) => {
+                    const t = e.currentTarget.currentTime;
+                    setCurrentTime(t);
+                    setProgress(duration ? (t / duration) * 100 : 0);
+                  }}
+                />
+              )}
             </div>
+
 
             {/* Video Section */}
             {lesson.videoCaption && (
