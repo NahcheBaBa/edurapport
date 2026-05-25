@@ -25,7 +25,9 @@ export interface Lesson {
   designArtCards?: DesignArtCard[];
   videoUrl?: string;
   videoCaption?: string;
+  audioUrl?: string;
   comments: Comment[];
+
 }
 
 export interface Comment {
