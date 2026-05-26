@@ -1,10 +1,10 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
   SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
-  Volume2, VolumeX,
+  Volume2, VolumeX, GripVertical,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import Navbar from "@/components/Navbar";
@@ -45,6 +45,45 @@ const LessonDetail = () => {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
+
+  // Draggable player position (vertical). null = default docked at bottom.
+  const playerRef = useRef<HTMLDivElement | null>(null);
+  const [playerY, setPlayerY] = useState<number | null>(null);
+  const dragOffsetRef = useRef(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragStart = useCallback((e: React.PointerEvent) => {
+    const el = playerRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    dragOffsetRef.current = e.clientY - rect.top;
+    setIsDragging(true);
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (ev: PointerEvent) => {
+      const el = playerRef.current;
+      if (!el) return;
+      const h = el.offsetHeight;
+      const maxY = window.innerHeight - h - 8;
+      let y = ev.clientY - dragOffsetRef.current;
+      y = Math.max(8, Math.min(maxY, y));
+      setPlayerY(y);
+    };
+    const onUp = () => setIsDragging(false);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [isDragging]);
+
 
   const navigate = useNavigate();
 
@@ -303,10 +342,31 @@ const LessonDetail = () => {
               </div>
             </div>
 
-            {/* Audio Player */}
-            <div className="mt-8 bg-muted rounded-2xl p-4 space-y-3">
+            {/* Audio Player — draggable vertically */}
+            <div
+              ref={playerRef}
+              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border border-border ${
+                isDragging ? "cursor-grabbing select-none" : ""
+              }`}
+              style={
+                playerY === null
+                  ? { bottom: "1rem" }
+                  : { top: `${playerY}px` }
+              }
+            >
               {/* Top row — controls */}
               <div className="flex items-center gap-3">
+                {/* Drag handle */}
+                <button
+                  type="button"
+                  onPointerDown={onDragStart}
+                  title="Drag to move player"
+                  aria-label="Drag player vertically"
+                  className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing touch-none -ml-1"
+                >
+                  <GripVertical size={18} />
+                </button>
+
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-1">
                   <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
                     {lesson.title.split(" ").slice(1, 3).join("\n")}
@@ -466,6 +526,8 @@ const LessonDetail = () => {
                 />
               )}
             </div>
+            {/* Spacer to prevent fixed player from covering content when docked */}
+            <div aria-hidden className="h-32" />
 
 
             {/* Video Section */}
