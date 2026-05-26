@@ -4,7 +4,9 @@ import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
   SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
+  Volume2, VolumeX,
 } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -39,6 +41,8 @@ const LessonDetail = () => {
   const [isLooping, setIsLooping] = useState(false);
   const [loopA, setLoopA] = useState<number | null>(null);
   const [loopB, setLoopB] = useState<number | null>(null);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
@@ -150,7 +154,24 @@ const LessonDetail = () => {
     setLoopB(null);
   };
 
+  const toggleMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const next = !isMuted;
+    audio.muted = next;
+    setIsMuted(next);
+  };
 
+  const handleVolumeChange = (val: number[]) => {
+    const audio = audioRef.current;
+    const next = val[0];
+    if (audio) audio.volume = next;
+    setVolume(next);
+    if (next > 0 && isMuted) {
+      setIsMuted(false);
+      if (audio) audio.muted = false;
+    }
+  };
 
   const addComment = () => {
     if (!commentText.trim()) return;
@@ -366,6 +387,27 @@ const LessonDetail = () => {
                   <Repeat2 size={14} />
                   {loopA === null ? "A-B" : loopB === null ? "A•" : "A↔B"}
                 </button>
+
+                {/* Volume */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={toggleMute}
+                    title={isMuted ? "Unmute" : "Mute"}
+                    className="text-foreground hover:text-primary transition-colors"
+                  >
+                    {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                  </button>
+                  <div className="w-20">
+                    <Slider
+                      value={[isMuted ? 0 : volume]}
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      onValueChange={handleVolumeChange}
+                      disabled={!audioSrc}
+                    />
+                  </div>
+                </div>
 
                 {/* Like */}
                 <button onClick={() => setLiked(!liked)} className="transition-colors">
