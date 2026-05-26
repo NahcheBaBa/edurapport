@@ -41,6 +41,8 @@ const LessonDetail = () => {
   const [isLooping, setIsLooping] = useState(false);
   const [loopA, setLoopA] = useState<number | null>(null);
   const [loopB, setLoopB] = useState<number | null>(null);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
