@@ -47,20 +47,40 @@ const LessonDetail = () => {
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
   // Draggable player position (vertical). null = default docked at bottom.
+  // Activated by double-tap/double-click anywhere on the player, then drag.
   const playerRef = useRef<HTMLDivElement | null>(null);
   const [playerY, setPlayerY] = useState<number | null>(null);
   const dragOffsetRef = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragArmed, setDragArmed] = useState(false);
+  const lastTapRef = useRef(0);
 
-  const onDragStart = useCallback((e: React.PointerEvent) => {
+  const armAndStartDrag = useCallback((clientY: number, pointerId?: number, target?: EventTarget | null) => {
     const el = playerRef.current;
     if (!el) return;
-    e.preventDefault();
     const rect = el.getBoundingClientRect();
-    dragOffsetRef.current = e.clientY - rect.top;
+    dragOffsetRef.current = clientY - rect.top;
+    setDragArmed(true);
     setIsDragging(true);
-    (e.target as Element).setPointerCapture?.(e.pointerId);
+    if (target && pointerId != null) {
+      (target as Element).setPointerCapture?.(pointerId);
+    }
   }, []);
+
+  const onPlayerPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      // Ignore interactive controls so buttons/sliders keep working
+      const target = e.target as HTMLElement;
+      if (target.closest("button, input, [role='slider'], a")) return;
+      const now = Date.now();
+      const isDouble = now - lastTapRef.current < 350;
+      lastTapRef.current = now;
+      if (!isDouble) return;
+      e.preventDefault();
+      armAndStartDrag(e.clientY, e.pointerId, e.target);
+    },
+    [armAndStartDrag]
+  );
 
   useEffect(() => {
     if (!isDragging) return;
@@ -73,7 +93,10 @@ const LessonDetail = () => {
       y = Math.max(8, Math.min(maxY, y));
       setPlayerY(y);
     };
-    const onUp = () => setIsDragging(false);
+    const onUp = () => {
+      setIsDragging(false);
+      setDragArmed(false);
+    };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);
@@ -83,6 +106,7 @@ const LessonDetail = () => {
       window.removeEventListener("pointercancel", onUp);
     };
   }, [isDragging]);
+
 
 
   const navigate = useNavigate();
@@ -342,30 +366,35 @@ const LessonDetail = () => {
               </div>
             </div>
 
-            {/* Audio Player — draggable vertically */}
+            {/* Audio Player — double-tap anywhere, then drag up/down */}
             <div
               ref={playerRef}
-              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border border-border ${
-                isDragging ? "cursor-grabbing select-none" : ""
+              onPointerDown={onPlayerPointerDown}
+              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border touch-none ${
+                isDragging
+                  ? "cursor-grabbing select-none border-primary ring-2 ring-primary/40"
+                  : dragArmed
+                  ? "border-primary"
+                  : "border-border"
               }`}
               style={
                 playerY === null
                   ? { bottom: "1rem" }
                   : { top: `${playerY}px` }
               }
+              title="Double-tap and drag to move"
             >
               {/* Top row — controls */}
               <div className="flex items-center gap-3">
-                {/* Drag handle */}
-                <button
-                  type="button"
-                  onPointerDown={onDragStart}
-                  title="Drag to move player"
-                  aria-label="Drag player vertically"
-                  className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing touch-none -ml-1"
+                {/* Drag hint */}
+                <div
+                  aria-hidden
+                  className="text-muted-foreground/70 -ml-1"
+                  title="Double-tap the player, then drag up/down"
                 >
                   <GripVertical size={18} />
-                </button>
+                </div>
+
 
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-1">
                   <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
