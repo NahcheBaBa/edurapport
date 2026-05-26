@@ -37,6 +37,8 @@ const LessonDetail = () => {
   const [activeAnnotation, setActiveAnnotation] = useState<LyricAnnotation | null>(null);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isLooping, setIsLooping] = useState(false);
+  const [loopA, setLoopA] = useState<number | null>(null);
+  const [loopB, setLoopB] = useState<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
