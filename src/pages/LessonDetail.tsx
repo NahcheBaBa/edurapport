@@ -4,7 +4,9 @@ import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
   SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
+  Volume2, VolumeX,
 } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
