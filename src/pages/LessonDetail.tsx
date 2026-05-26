@@ -128,6 +128,29 @@ const LessonDetail = () => {
     setPlaybackRate(nextRate);
   };
 
+  const handleSetAB = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const t = audio.currentTime;
+    if (loopA === null) {
+      setLoopA(t);
+    } else if (loopB === null) {
+      if (t > loopA) setLoopB(t);
+      else {
+        setLoopA(t);
+      }
+    } else {
+      setLoopA(null);
+      setLoopB(null);
+    }
+  };
+
+  const clearAB = () => {
+    setLoopA(null);
+    setLoopB(null);
+  };
+
+
 
   const addComment = () => {
     if (!commentText.trim()) return;
