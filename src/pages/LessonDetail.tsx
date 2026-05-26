@@ -1,10 +1,10 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
   SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
-  Volume2, VolumeX,
+  Volume2, VolumeX, GripVertical,
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import Navbar from "@/components/Navbar";
