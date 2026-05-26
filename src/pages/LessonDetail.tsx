@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
-  SkipBack, SkipForward, Repeat, Repeat1, Gauge,
+  SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
