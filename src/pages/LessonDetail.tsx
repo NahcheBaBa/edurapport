@@ -366,30 +366,35 @@ const LessonDetail = () => {
               </div>
             </div>
 
-            {/* Audio Player — draggable vertically */}
+            {/* Audio Player — double-tap anywhere, then drag up/down */}
             <div
               ref={playerRef}
-              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border border-border ${
-                isDragging ? "cursor-grabbing select-none" : ""
+              onPointerDown={onPlayerPointerDown}
+              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border touch-none ${
+                isDragging
+                  ? "cursor-grabbing select-none border-primary ring-2 ring-primary/40"
+                  : dragArmed
+                  ? "border-primary"
+                  : "border-border"
               }`}
               style={
                 playerY === null
                   ? { bottom: "1rem" }
                   : { top: `${playerY}px` }
               }
+              title="Double-tap and drag to move"
             >
               {/* Top row — controls */}
               <div className="flex items-center gap-3">
-                {/* Drag handle */}
-                <button
-                  type="button"
-                  onPointerDown={onDragStart}
-                  title="Drag to move player"
-                  aria-label="Drag player vertically"
-                  className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing touch-none -ml-1"
+                {/* Drag hint */}
+                <div
+                  aria-hidden
+                  className="text-muted-foreground/70 -ml-1"
+                  title="Double-tap the player, then drag up/down"
                 >
                   <GripVertical size={18} />
-                </button>
+                </div>
+
 
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-1">
                   <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
