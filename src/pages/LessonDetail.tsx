@@ -342,10 +342,31 @@ const LessonDetail = () => {
               </div>
             </div>
 
-            {/* Audio Player */}
-            <div className="mt-8 bg-muted rounded-2xl p-4 space-y-3">
+            {/* Audio Player — draggable vertically */}
+            <div
+              ref={playerRef}
+              className={`fixed left-4 right-4 md:left-8 md:right-8 z-40 bg-muted/95 backdrop-blur rounded-2xl p-4 space-y-3 shadow-xl border border-border ${
+                isDragging ? "cursor-grabbing select-none" : ""
+              }`}
+              style={
+                playerY === null
+                  ? { bottom: "1rem" }
+                  : { top: `${playerY}px` }
+              }
+            >
               {/* Top row — controls */}
               <div className="flex items-center gap-3">
+                {/* Drag handle */}
+                <button
+                  type="button"
+                  onPointerDown={onDragStart}
+                  title="Drag to move player"
+                  aria-label="Drag player vertically"
+                  className="text-muted-foreground hover:text-foreground cursor-grab active:cursor-grabbing touch-none -ml-1"
+                >
+                  <GripVertical size={18} />
+                </button>
+
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-1">
                   <span className="text-primary-foreground text-[8px] font-bold leading-tight text-center">
                     {lesson.title.split(" ").slice(1, 3).join("\n")}
