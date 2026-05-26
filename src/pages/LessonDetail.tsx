@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   ArrowLeft, Play, Pause, Heart, Eye, Calendar, Headphones, Send,
-  SkipBack, SkipForward, Repeat, Repeat1, Gauge,
+  SkipBack, SkipForward, Repeat, Repeat1, Gauge, Repeat2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -37,6 +37,8 @@ const LessonDetail = () => {
   const [activeAnnotation, setActiveAnnotation] = useState<LyricAnnotation | null>(null);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isLooping, setIsLooping] = useState(false);
+  const [loopA, setLoopA] = useState<number | null>(null);
+  const [loopB, setLoopB] = useState<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
@@ -125,6 +127,29 @@ const LessonDetail = () => {
     if (audio) audio.playbackRate = nextRate;
     setPlaybackRate(nextRate);
   };
+
+  const handleSetAB = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const t = audio.currentTime;
+    if (loopA === null) {
+      setLoopA(t);
+    } else if (loopB === null) {
+      if (t > loopA) setLoopB(t);
+      else {
+        setLoopA(t);
+      }
+    } else {
+      setLoopA(null);
+      setLoopB(null);
+    }
+  };
+
+  const clearAB = () => {
+    setLoopA(null);
+    setLoopB(null);
+  };
+
 
 
   const addComment = () => {
@@ -321,6 +346,27 @@ const LessonDetail = () => {
                   {isLooping ? <Repeat1 size={20} /> : <Repeat size={20} />}
                 </button>
 
+                {/* A/B loop */}
+                <button
+                  onClick={handleSetAB}
+                  onDoubleClick={clearAB}
+                  title={
+                    loopA === null
+                      ? "Set point A"
+                      : loopB === null
+                      ? "Set point B"
+                      : `A-B loop: ${formatTime(loopA)} → ${formatTime(loopB)} (double-click to clear)`
+                  }
+                  className={`flex items-center gap-0.5 text-[10px] font-bold transition-colors bg-background/60 rounded-md px-1.5 py-0.5 ${
+                    loopA !== null && loopB !== null
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
+                  }`}
+                >
+                  <Repeat2 size={14} />
+                  {loopA === null ? "A-B" : loopB === null ? "A•" : "A↔B"}
+                </button>
+
                 {/* Like */}
                 <button onClick={() => setLiked(!liked)} className="transition-colors">
                   <Heart
@@ -366,7 +412,12 @@ const LessonDetail = () => {
                   }}
                   onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
                   onTimeUpdate={(e) => {
-                    const t = e.currentTarget.currentTime;
+                    const audio = e.currentTarget;
+                    let t = audio.currentTime;
+                    if (loopA !== null && loopB !== null && t >= loopB) {
+                      audio.currentTime = loopA;
+                      t = loopA;
+                    }
                     setCurrentTime(t);
                     setProgress(duration ? (t / duration) * 100 : 0);
                   }}
