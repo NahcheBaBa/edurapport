@@ -412,7 +412,12 @@ const LessonDetail = () => {
                   }}
                   onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
                   onTimeUpdate={(e) => {
-                    const t = e.currentTarget.currentTime;
+                    const audio = e.currentTarget;
+                    let t = audio.currentTime;
+                    if (loopA !== null && loopB !== null && t >= loopB) {
+                      audio.currentTime = loopA;
+                      t = loopA;
+                    }
                     setCurrentTime(t);
                     setProgress(duration ? (t / duration) * 100 : 0);
                   }}
