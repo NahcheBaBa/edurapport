@@ -154,7 +154,24 @@ const LessonDetail = () => {
     setLoopB(null);
   };
 
+  const toggleMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const next = !isMuted;
+    audio.muted = next;
+    setIsMuted(next);
+  };
 
+  const handleVolumeChange = (val: number[]) => {
+    const audio = audioRef.current;
+    const next = val[0];
+    if (audio) audio.volume = next;
+    setVolume(next);
+    if (next > 0 && isMuted) {
+      setIsMuted(false);
+      if (audio) audio.muted = false;
+    }
+  };
 
   const addComment = () => {
     if (!commentText.trim()) return;
