@@ -526,6 +526,8 @@ const LessonDetail = () => {
                 />
               )}
             </div>
+            {/* Spacer to prevent fixed player from covering content when docked */}
+            <div aria-hidden className="h-32" />
 
 
             {/* Video Section */}
