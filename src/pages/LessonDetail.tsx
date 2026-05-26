@@ -346,6 +346,27 @@ const LessonDetail = () => {
                   {isLooping ? <Repeat1 size={20} /> : <Repeat size={20} />}
                 </button>
 
+                {/* A/B loop */}
+                <button
+                  onClick={handleSetAB}
+                  onDoubleClick={clearAB}
+                  title={
+                    loopA === null
+                      ? "Set point A"
+                      : loopB === null
+                      ? "Set point B"
+                      : `A-B loop: ${formatTime(loopA)} → ${formatTime(loopB)} (double-click to clear)`
+                  }
+                  className={`flex items-center gap-0.5 text-[10px] font-bold transition-colors bg-background/60 rounded-md px-1.5 py-0.5 ${
+                    loopA !== null && loopB !== null
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
+                  }`}
+                >
+                  <Repeat2 size={14} />
+                  {loopA === null ? "A-B" : loopB === null ? "A•" : "A↔B"}
+                </button>
+
                 {/* Like */}
                 <button onClick={() => setLiked(!liked)} className="transition-colors">
                   <Heart
