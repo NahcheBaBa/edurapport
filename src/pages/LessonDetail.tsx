@@ -388,6 +388,27 @@ const LessonDetail = () => {
                   {loopA === null ? "A-B" : loopB === null ? "A•" : "A↔B"}
                 </button>
 
+                {/* Volume */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={toggleMute}
+                    title={isMuted ? "Unmute" : "Mute"}
+                    className="text-foreground hover:text-primary transition-colors"
+                  >
+                    {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                  </button>
+                  <div className="w-20">
+                    <Slider
+                      value={[isMuted ? 0 : volume]}
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      onValueChange={handleVolumeChange}
+                      disabled={!audioSrc}
+                    />
+                  </div>
+                </div>
+
                 {/* Like */}
                 <button onClick={() => setLiked(!liked)} className="transition-colors">
                   <Heart
