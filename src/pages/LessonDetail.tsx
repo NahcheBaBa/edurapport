@@ -46,6 +46,45 @@ const LessonDetail = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioSrc = lesson ? lessonAudioMap[lesson.id] : undefined;
 
+  // Draggable player position (vertical). null = default docked at bottom.
+  const playerRef = useRef<HTMLDivElement | null>(null);
+  const [playerY, setPlayerY] = useState<number | null>(null);
+  const dragOffsetRef = useRef(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragStart = useCallback((e: React.PointerEvent) => {
+    const el = playerRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    dragOffsetRef.current = e.clientY - rect.top;
+    setIsDragging(true);
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+  }, []);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMove = (ev: PointerEvent) => {
+      const el = playerRef.current;
+      if (!el) return;
+      const h = el.offsetHeight;
+      const maxY = window.innerHeight - h - 8;
+      let y = ev.clientY - dragOffsetRef.current;
+      y = Math.max(8, Math.min(maxY, y));
+      setPlayerY(y);
+    };
+    const onUp = () => setIsDragging(false);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [isDragging]);
+
+
   const navigate = useNavigate();
 
   // Next / previous lessons within the same subject
