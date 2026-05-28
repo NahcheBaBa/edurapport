@@ -55,12 +55,11 @@ const Navbar = () => {
           <a href="#login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
             Login
           </a>
-          <a
-            href="#signup"
+          <Link
+            to="/signup"
             className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
-            
             Sign up
-          </a>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -85,7 +84,7 @@ const Navbar = () => {
           )}
           <div className="flex gap-3 pt-2">
             <a href="#login" className="text-sm font-semibold text-primary">Login</a>
-            <a href="#signup" className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full">Sign up</a>
+            <Link to="/signup" onClick={() => setOpen(false)} className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full">Sign up</Link>
           </div>
         </div>
       }
