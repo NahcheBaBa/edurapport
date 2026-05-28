@@ -56,13 +56,14 @@ const Navbar = () => {
             Login
           </a>
           <a
-            href="#signup"
-            className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
-            
-            Sign up
+          <a href="#login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
+            Login
           </a>
-        </div>
-
+          <Link
+            to="/signup"
+            className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
+            Sign up
+          </Link>
         {/* Mobile toggle */}
         <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
           {open ? <X size={24} /> : <Menu size={24} />}
