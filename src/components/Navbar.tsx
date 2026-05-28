@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
-{ label: "Subjects", href: "#projects" },
+{ label: "Subjects", to: "/subjects" },
 { label: "About us", href: "#about" },
 { label: "Contact us", href: "#contact" }];
 
@@ -24,12 +25,21 @@ const Navbar = () => {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((l) =>
-          <a
-            key={l.label}
-            href={l.href}
-            className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
-              {l.label}
-            </a>
+            l.to ? (
+              <Link
+                key={l.label}
+                to={l.to}
+                className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                {l.label}
+              </Link>
+            ) : (
+              <a
+                key={l.label}
+                href={l.href}
+                className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                {l.label}
+              </a>
+            )
           )}
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -63,10 +73,16 @@ const Navbar = () => {
       {open &&
       <div className="md:hidden bg-background border-t border-border px-6 pb-4 space-y-3">
           {navLinks.map((l) =>
-        <a key={l.label} href={l.href} className="block text-sm font-semibold text-foreground py-2" onClick={() => setOpen(false)}>
-              {l.label}
-            </a>
-        )}
+            l.to ? (
+              <Link key={l.label} to={l.to} className="block text-sm font-semibold text-foreground py-2" onClick={() => setOpen(false)}>
+                {l.label}
+              </Link>
+            ) : (
+              <a key={l.label} href={l.href} className="block text-sm font-semibold text-foreground py-2" onClick={() => setOpen(false)}>
+                {l.label}
+              </a>
+            )
+          )}
           <div className="flex gap-3 pt-2">
             <a href="#login" className="text-sm font-semibold text-primary">Login</a>
             <a href="#signup" className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full">Sign up</a>
