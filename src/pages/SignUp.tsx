@@ -41,6 +41,7 @@ const SignUp = () => {
   const [step, setStep] = useState<Step>("details");
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
+  const [country, setCountry] = useState("US");
 
   const [form, setForm] = useState({ display_name: "", phone: "", password: "" });
 
