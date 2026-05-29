@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { ArrowLeft, GraduationCap, Loader2, Lock, Phone, User, BookOpen } from "lucide-react";
+import { ArrowLeft, GraduationCap, Loader2, Lock, User, BookOpen } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -35,6 +35,24 @@ const detailsSchema = z.object({
     .max(72, "Password is too long"),
 });
 
+const COUNTRIES = [
+  { code: "US", name: "United States", dial: "+1", flag: "🇺🇸" },
+  { code: "GB", name: "United Kingdom", dial: "+44", flag: "🇬🇧" },
+  { code: "CA", name: "Canada", dial: "+1", flag: "🇨🇦" },
+  { code: "AU", name: "Australia", dial: "+61", flag: "🇦🇺" },
+  { code: "NG", name: "Nigeria", dial: "+234", flag: "🇳🇬" },
+  { code: "GH", name: "Ghana", dial: "+233", flag: "🇬🇭" },
+  { code: "KE", name: "Kenya", dial: "+254", flag: "🇰🇪" },
+  { code: "ZA", name: "South Africa", dial: "+27", flag: "🇿🇦" },
+  { code: "IN", name: "India", dial: "+91", flag: "🇮🇳" },
+  { code: "DE", name: "Germany", dial: "+49", flag: "🇩🇪" },
+  { code: "FR", name: "France", dial: "+33", flag: "🇫🇷" },
+  { code: "BR", name: "Brazil", dial: "+55", flag: "🇧🇷" },
+  { code: "JP", name: "Japan", dial: "+81", flag: "🇯🇵" },
+  { code: "CN", name: "China", dial: "+86", flag: "🇨🇳" },
+  { code: "MX", name: "Mexico", dial: "+52", flag: "🇲🇽" },
+] as const;
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState<Role>("student");
@@ -51,6 +69,19 @@ const SignUp = () => {
       if (data.session) navigate("/", { replace: true });
     });
   }, [navigate]);
+
+  const selectedCountry = COUNTRIES.find((c) => c.code === country);
+  const countryCode = selectedCountry?.dial ?? "+1";
+
+  const handleCountryChange = (code: string) => {
+    const newDial = COUNTRIES.find((c) => c.code === code)?.dial ?? "+1";
+    const oldDial = countryCode;
+    const local = form.phone.startsWith(oldDial)
+      ? form.phone.slice(oldDial.length)
+      : form.phone.replace(/^\+/, "");
+    setCountry(code);
+    setForm((f) => ({ ...f, phone: newDial + local }));
+  };
 
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -228,21 +259,40 @@ const SignUp = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone number</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <div className="flex gap-2">
+                    <Select value={country} onValueChange={handleCountryChange}>
+                      <SelectTrigger className="h-11 w-[140px] shrink-0" aria-label="Country code">
+                        <SelectValue placeholder="Code">
+                          {selectedCountry?.flag} {selectedCountry?.dial}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {COUNTRIES.map((c) => (
+                          <SelectItem key={c.code} value={c.code}>
+                            <span className="mr-2">{c.flag}</span>
+                            {c.name} {c.dial}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Input
                       id="phone"
                       type="tel"
-                      value={form.phone}
-                      onChange={update("phone")}
-                      placeholder="+15551234567"
-                      className="pl-9 h-11"
+                      value={form.phone.startsWith(countryCode) ? form.phone.slice(countryCode.length) : ""}
+                      onChange={(e) =>
+                        setForm((f) => ({
+                          ...f,
+                          phone: countryCode + e.target.value.replace(/\D/g, ""),
+                        }))
+                      }
+                      placeholder="5551234567"
+                      className="h-11 flex-1"
                       autoComplete="tel"
                       required
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Include your country code. We'll text you a verification code.
+                    We'll text you a verification code.
                   </p>
                 </div>
 
