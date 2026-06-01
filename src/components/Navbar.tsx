@@ -52,9 +52,9 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href="#login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
+          <Link to="/login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
             Login
-          </a>
+          </Link>
           <Link
             to="/signup"
             className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
@@ -83,7 +83,7 @@ const Navbar = () => {
             )
           )}
           <div className="flex gap-3 pt-2">
-            <a href="#login" className="text-sm font-semibold text-primary">Login</a>
+            <Link to="/login" onClick={() => setOpen(false)} className="text-sm font-semibold text-primary">Login</Link>
             <Link to="/signup" onClick={() => setOpen(false)} className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full">Sign up</Link>
           </div>
         </div>
