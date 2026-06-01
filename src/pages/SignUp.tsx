@@ -76,6 +76,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [country, setCountry] = useState("US");
+  const [countryOpen, setCountryOpen] = useState(false);
 
   const [form, setForm] = useState({ display_name: "", phone: "", password: "" });
 
