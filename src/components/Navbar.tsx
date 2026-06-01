@@ -54,7 +54,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-3">
           <Link to="/login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
             Login
-          </a>
+          </Link>
           <Link
             to="/signup"
             className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
