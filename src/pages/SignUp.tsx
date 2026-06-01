@@ -277,12 +277,12 @@ const SignUp = () => {
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone number</Label>
                   <div className="flex gap-2">
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover open={countryOpen} onOpenChange={setCountryOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
                           role="combobox"
-                          aria-expanded={open}
+                          aria-expanded={countryOpen}
                           className="h-11 w-[140px] shrink-0 justify-between"
                         >
                           <span>
@@ -303,7 +303,7 @@ const SignUp = () => {
                                   value={`${c.name} ${c.dial}`}
                                   onSelect={() => {
                                     handleCountryChange(c.code);
-                                    setOpen(false);
+                                    setCountryOpen(false);
                                   }}
                                 >
                                   <Check
