@@ -39,17 +39,20 @@ import { cn } from "@/lib/utils";
 type Role = "student" | "educator";
 type Step = "details" | "otp";
 
-const detailsSchema = z.object({
-  display_name: z.string().trim().min(2, "Please enter your name").max(80),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\+[1-9]\d{6,14}$/, "Use international format, e.g. +15551234567"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(72, "Password is too long"),
-});
+const detailsSchema = z
+  .object({
+    display_name: z.string().trim().min(2, "Please enter your name").max(80),
+    phone: z
+      .string()
+      .trim()
+      .regex(/^\+[1-9]\d{6,14}$/, "Use international format, e.g. +15551234567"),
+    password: z.string().min(8, "Password must be at least 8 characters").max(72),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 const COUNTRIES = [
   { code: "US", name: "United States", dial: "+1", flag: "🇺🇸" },
@@ -78,7 +81,7 @@ const SignUp = () => {
   const [country, setCountry] = useState("US");
   const [countryOpen, setCountryOpen] = useState(false);
 
-  const [form, setForm] = useState({ display_name: "", phone: "", password: "" });
+  const [form, setForm] = useState({ display_name: "", phone: "", password: "", confirmPassword: "" });
 
   // Redirect signed-in users away from sign-up
   useEffect(() => {
@@ -352,6 +355,23 @@ const SignUp = () => {
                       value={form.password}
                       onChange={update("password")}
                       placeholder="At least 8 characters"
+                      className="pl-9 h-11"
+                      autoComplete="new-password"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={form.confirmPassword}
+                      onChange={update("confirmPassword")}
+                      placeholder="Re-enter your password"
                       className="pl-9 h-11"
                       autoComplete="new-password"
                       required
