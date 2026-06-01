@@ -9,6 +9,7 @@ import SubjectDetail from "./pages/SubjectDetail.tsx";
 import LessonDetail from "./pages/LessonDetail.tsx";
 import AlgebraQuiz from "./pages/AlgebraQuiz.tsx";
 import SignUp from "./pages/SignUp.tsx";
+import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 const queryClient = new QueryClient();
 
