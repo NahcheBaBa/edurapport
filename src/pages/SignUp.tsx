@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { ArrowLeft, GraduationCap, Loader2, Lock, User, BookOpen } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronsUpDown,
+  GraduationCap,
+  Loader2,
+  Lock,
+  User,
+  BookOpen,
+} from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -13,12 +22,19 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { toast } from "@/hooks/use-toast";
 import logo from "@/assets/logo.png";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 type Role = "student" | "educator";
 type Step = "details" | "otp";
@@ -60,6 +76,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [country, setCountry] = useState("US");
+  const [countryOpen, setCountryOpen] = useState(false);
 
   const [form, setForm] = useState({ display_name: "", phone: "", password: "" });
 
@@ -260,21 +277,50 @@ const SignUp = () => {
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone number</Label>
                   <div className="flex gap-2">
-                    <Select value={country} onValueChange={handleCountryChange}>
-                      <SelectTrigger className="h-11 w-[140px] shrink-0" aria-label="Country code">
-                        <SelectValue placeholder="Code">
-                          {selectedCountry?.flag} {selectedCountry?.dial}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {COUNTRIES.map((c) => (
-                          <SelectItem key={c.code} value={c.code}>
-                            <span className="mr-2">{c.flag}</span>
-                            {c.name} {c.dial}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={countryOpen}
+                          className="h-11 w-[140px] shrink-0 justify-between"
+                        >
+                          <span>
+                            {selectedCountry?.flag} {selectedCountry?.dial}
+                          </span>
+                          <ChevronsUpDown className="ml-1 h-3 w-3 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[260px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search country..." />
+                          <CommandList>
+                            <CommandEmpty>No country found.</CommandEmpty>
+                            <CommandGroup>
+                              {COUNTRIES.map((c) => (
+                                <CommandItem
+                                  key={c.code}
+                                  value={`${c.name} ${c.dial}`}
+                                  onSelect={() => {
+                                    handleCountryChange(c.code);
+                                    setCountryOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      country === c.code ? "opacity-100" : "opacity-0",
+                                    )}
+                                  />
+                                  <span className="mr-2">{c.flag}</span>
+                                  {c.name} {c.dial}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <Input
                       id="phone"
                       type="tel"
