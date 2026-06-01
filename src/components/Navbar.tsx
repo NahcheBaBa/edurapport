@@ -52,7 +52,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href="#login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
+          <Link to="/login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
             Login
           </a>
           <Link
