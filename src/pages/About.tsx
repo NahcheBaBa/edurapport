@@ -48,7 +48,7 @@ const About = () => (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
             <div className="relative bg-card rounded-3xl p-6 md:p-8 border border-border shadow-lg">
               <img
-                src={aboutCharacters.url}
+                src={aboutCharacters}
                 alt="EduRapport learners — a student using a tablet and another with a microphone"
                 className="w-full h-auto"
               />
