@@ -45,8 +45,8 @@ const About = () => (
 
           {/* Image column */}
           <div className="order-1 md:order-2 relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
-            <div className="relative bg-card rounded-3xl p-6 md:p-8 border border-border shadow-lg">
+            <div className="absolute -inset-4 bg-gradient-to-br from-primary/25 to-accent/25 rounded-[2.5rem] blur-3xl" />
+            <div className="relative bg-card rounded-[2rem] p-10 md:p-14 border border-border/60 shadow-soft-card transition-transform duration-500 hover:scale-[1.02]">
               <img
                 src={aboutCharacters}
                 alt="EduRapport learners — a student using a tablet and another with a microphone"
