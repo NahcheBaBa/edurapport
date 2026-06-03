@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import aboutCharacters from "@/assets/about-characters.png.asset.json";
+import aboutCharacters from "@/assets/about-characters.png";
 
 const stats = [
   { value: "10+", label: "Subjects" },
