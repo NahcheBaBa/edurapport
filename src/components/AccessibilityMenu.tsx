@@ -99,11 +99,11 @@ export default function AccessibilityMenu() {
       <SheetTrigger asChild>
         <Button
           variant="outline"
-          size="icon"
           aria-label="Open accessibility menu"
-          className="fixed top-4 right-4 z-50 h-11 w-11 rounded-full shadow-md bg-background"
+          className="fixed top-4 right-4 z-50 h-auto flex flex-col items-center gap-0.5 py-2 px-2.5 rounded-xl shadow-md bg-background"
         >
           <Menu className="h-5 w-5" />
+          <span className="text-[10px] font-semibold leading-tight">Accessible<br/>menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="bg-primary text-primary-foreground border-l-0 w-80 overflow-y-auto">
