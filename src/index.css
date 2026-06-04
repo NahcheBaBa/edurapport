@@ -84,3 +84,15 @@
       inset 0 1px 1px rgba(255, 255, 255, 0.6);
   }
 }
+
+.a11y-simplified img,
+.a11y-simplified video,
+.a11y-simplified [aria-hidden="true"] svg {
+  filter: grayscale(0.4);
+}
+.a11y-simplified * {
+  background-image: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+  transition: none !important;
+}
