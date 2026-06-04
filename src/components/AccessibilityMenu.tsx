@@ -13,6 +13,26 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
+const STORAGE_KEY = "edurapport-a11y";
+
+function getStoredPrefs() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    /* ignore */
+  }
+  return {};
+}
+
+function setStoredPrefs(prefs: Record<string, unknown>) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+  } catch {
+    /* ignore */
+  }
+}
+
 const FONTS = [
   { label: "Inter", value: "'Inter', sans-serif" },
   { label: "Arial", value: "Arial, sans-serif" },
@@ -34,10 +54,19 @@ const MAX_FONT = 24;
 const DEFAULT_FONT = 16;
 
 export default function AccessibilityMenu() {
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT);
-  const [fontFamily, setFontFamily] = useState("");
-  const [theme, setTheme] = useState("Default");
-  const [simplified, setSimplified] = useState(false);
+  const stored = getStoredPrefs();
+  const [fontSize, setFontSize] = useState<number>(
+    typeof stored.fontSize === "number" ? stored.fontSize : DEFAULT_FONT
+  );
+  const [fontFamily, setFontFamily] = useState<string>(
+    typeof stored.fontFamily === "string" ? stored.fontFamily : ""
+  );
+  const [theme, setTheme] = useState<string>(
+    typeof stored.theme === "string" ? stored.theme : "Default"
+  );
+  const [simplified, setSimplified] = useState<boolean>(
+    typeof stored.simplified === "boolean" ? stored.simplified : false
+  );
   const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
@@ -61,8 +90,8 @@ export default function AccessibilityMenu() {
   }, [theme]);
 
   useEffect(() => {
-    document.body.classList.toggle("a11y-simplified", simplified);
-  }, [simplified]);
+    setStoredPrefs({ fontSize, fontFamily, theme, simplified });
+  }, [fontSize, fontFamily, theme, simplified]);
 
   useEffect(() => {
     return () => {
@@ -90,6 +119,11 @@ export default function AccessibilityMenu() {
     setFontFamily("");
     setTheme("Default");
     setSimplified(false);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
     window.speechSynthesis?.cancel();
     setSpeaking(false);
   };
