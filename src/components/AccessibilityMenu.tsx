@@ -119,6 +119,11 @@ export default function AccessibilityMenu() {
     setFontFamily("");
     setTheme("Default");
     setSimplified(false);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
     window.speechSynthesis?.cancel();
     setSpeaking(false);
   };
