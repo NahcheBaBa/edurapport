@@ -35,7 +35,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import AccessibilityMenu from "@/components/AccessibilityMenu";
 
 type Role = "student" | "educator";
 type Step = "details" | "otp";
