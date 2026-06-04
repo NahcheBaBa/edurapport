@@ -451,7 +451,7 @@ const SignUp = () => {
             Log in
           </Link>
         </p>
-      </div>
+      </main>
     </div>
   );
 };
