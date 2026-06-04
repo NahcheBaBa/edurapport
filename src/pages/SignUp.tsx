@@ -194,7 +194,6 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <AccessibilityMenu />
       <main className="container max-w-xl py-8 md:py-12">
         <Link
           to="/"
