@@ -90,8 +90,8 @@ export default function AccessibilityMenu() {
   }, [theme]);
 
   useEffect(() => {
-    document.body.classList.toggle("a11y-simplified", simplified);
-  }, [simplified]);
+    setStoredPrefs({ fontSize, fontFamily, theme, simplified });
+  }, [fontSize, fontFamily, theme, simplified]);
 
   useEffect(() => {
     return () => {
