@@ -148,18 +148,26 @@ const SignUp = () => {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       phone: form.phone,
       token: otp,
       type: "sms",
     });
+    if (!error && data.user) {
+      await supabase.from("notifications").insert({
+        user_id: data.user.id,
+        title: `Welcome to EduRapport, ${form.display_name.split(" ")[0]}!`,
+        body: "Set up your profile to personalize your learning.",
+        link: "/profile-setup",
+      });
+    }
     setLoading(false);
     if (error) {
       toast({ title: "Invalid code", description: error.message, variant: "destructive" });
       return;
     }
-    toast({ title: "Welcome to EduRapport!", description: "Your account is ready." });
-    navigate("/", { replace: true });
+    toast({ title: "Welcome to EduRapport!", description: "Let's set up your profile." });
+    navigate("/profile-setup", { replace: true });
   };
 
   const handleResend = async () => {

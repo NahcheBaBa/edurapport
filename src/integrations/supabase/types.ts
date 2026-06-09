@@ -14,31 +14,79 @@ export type Database = {
   }
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string
           display_name: string | null
+          grade_level: string | null
           id: string
+          notify_email: boolean
+          notify_sms: boolean
           phone: string | null
+          profile_completed: boolean
           role: Database["public"]["Enums"]["user_role"]
+          subjects: string[]
           updated_at: string
           user_id: string
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          grade_level?: string | null
           id?: string
+          notify_email?: boolean
+          notify_sms?: boolean
           phone?: string | null
+          profile_completed?: boolean
           role?: Database["public"]["Enums"]["user_role"]
+          subjects?: string[]
           updated_at?: string
           user_id: string
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          grade_level?: string | null
           id?: string
+          notify_email?: boolean
+          notify_sms?: boolean
           phone?: string | null
+          profile_completed?: boolean
           role?: Database["public"]["Enums"]["user_role"]
+          subjects?: string[]
           updated_at?: string
           user_id?: string
         }
