@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import logo from "@/assets/logo.png";
+import NotificationBell from "@/components/NotificationBell";
+import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
 { label: "Subjects", to: "/subjects" },
@@ -11,6 +13,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
@@ -52,15 +55,28 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
-            Sign up
-          </Link>
+          {user ? (
+            <NotificationBell />
+          ) : (
+            <>
+              <Link to="/login" className="text-sm font-semibold text-primary hover:text-accent transition-colors">
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="gradient-primary text-primary-foreground text-sm font-bold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
+
+        {/* Mobile bell */}
+        {user && (
+          <div className="md:hidden">
+            <NotificationBell />
+          </div>
+        )}
 
         {/* Mobile toggle */}
         <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>

@@ -6,10 +6,12 @@ import SubjectsSection from "@/components/SubjectsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CommunitySection from "@/components/CommunitySection";
 import Footer from "@/components/Footer";
+import ProfileSetupBanner from "@/components/ProfileSetupBanner";
 
 const Index = () => (
   <div className="min-h-screen bg-background">
     <Navbar />
+    <ProfileSetupBanner />
     <HeroSection />
     <HowItWorks />
     <MissionSection />
