@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Loader2, GraduationCap, BookOpen, Check } from "lucide-react";
 import { z } from "zod";
 
@@ -48,6 +48,8 @@ const schema = z.object({
 
 const ProfileSetup = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEditMode = location.pathname === "/profile";
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [hydrating, setHydrating] = useState(true);
@@ -131,9 +133,9 @@ const ProfileSetup = () => {
     if (!error) {
       await supabase.from("notifications").insert({
         user_id: user.id,
-        title: "Profile complete 🎉",
-        body: "Your learning experience is now personalized.",
-        link: "/subjects",
+        title: isEditMode ? "Profile updated" : "Profile complete 🎉",
+        body: isEditMode ? "Your changes have been saved." : "Your learning experience is now personalized.",
+        link: isEditMode ? "/profile" : "/subjects",
       });
     }
 
@@ -142,8 +144,8 @@ const ProfileSetup = () => {
       toast({ title: "Couldn't save", description: error.message, variant: "destructive" });
       return;
     }
-    toast({ title: "Profile saved!", description: "Let's start learning." });
-    navigate("/subjects", { replace: true });
+    toast({ title: "Profile saved!", description: isEditMode ? "Your changes have been saved." : "Let's start learning." });
+    navigate(isEditMode ? "/" : "/subjects", { replace: true });
   };
 
   if (authLoading || hydrating) {
@@ -157,21 +159,32 @@ const ProfileSetup = () => {
   return (
     <div className="min-h-screen bg-background">
       <main className="container max-w-2xl py-8 md:py-12">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent mb-8"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Skip for now
-        </Link>
+        {!isEditMode && (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent mb-8"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Skip for now
+          </Link>
+        )}
+        {isEditMode && (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-accent mb-8"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to home
+          </Link>
+        )}
 
         <div className="flex flex-col items-center text-center mb-8">
           <img src={logo} alt="EduRapport" className="h-14 w-auto mb-4" />
           <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
-            Set up your profile
+            {isEditMode ? "Edit your profile" : "Set up your profile"}
           </h1>
           <p className="text-muted-foreground mt-2 font-body">
-            Help us personalize your learning experience.
+            {isEditMode ? "Update your learning preferences anytime." : "Help us personalize your learning experience."}
           </p>
         </div>
 
@@ -336,7 +349,7 @@ const ProfileSetup = () => {
             className="w-full h-12 gradient-primary text-primary-foreground font-bold text-base rounded-full hover:opacity-90"
             disabled={loading}
           >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save and continue"}
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditMode ? "Save changes" : "Save and continue"}
           </Button>
         </form>
       </main>
