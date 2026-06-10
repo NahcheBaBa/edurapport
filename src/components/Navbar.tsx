@@ -1,9 +1,19 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, Search, LogOut, User, Settings } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
 { label: "Subjects", to: "/subjects" },

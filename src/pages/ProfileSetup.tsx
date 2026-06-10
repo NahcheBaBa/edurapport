@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Loader2, GraduationCap, BookOpen, Check } from "lucide-react";
 import { z } from "zod";
 
