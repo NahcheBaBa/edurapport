@@ -19,6 +19,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
+import AvatarUpload from "@/components/AvatarUpload";
 
 const SUBJECTS = [
   "English",
@@ -43,7 +44,6 @@ const GRADES = [
 
 const schema = z.object({
   display_name: z.string().trim().min(2, "Please enter your name").max(80),
-  avatar_url: z.string().trim().url("Use a valid image URL").max(500).or(z.literal("")),
 });
 
 const ProfileSetup = () => {
@@ -102,7 +102,7 @@ const ProfileSetup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    const parsed = schema.safeParse({ display_name: displayName, avatar_url: avatarUrl });
+    const parsed = schema.safeParse({ display_name: displayName });
     if (!parsed.success) {
       toast({
         title: "Check your details",
@@ -120,7 +120,7 @@ const ProfileSetup = () => {
       .from("profiles")
       .update({
         display_name: parsed.data.display_name,
-        avatar_url: parsed.data.avatar_url || null,
+        avatar_url: avatarUrl || null,
         role,
         grade_level: grade,
         subjects,
@@ -195,43 +195,24 @@ const ProfileSetup = () => {
           {/* Identity */}
           <section className="space-y-4">
             <h2 className="font-heading font-bold text-lg text-foreground">About you</h2>
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
-                {avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={avatarUrl}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    onError={(e) => ((e.target as HTMLImageElement).style.display = "none")}
-                  />
-                ) : (
-                  <span className="font-heading font-bold text-xl text-primary">
-                    {initials}
-                  </span>
-                )}
-              </div>
-              <div className="flex-1 space-y-2">
-                <Label htmlFor="display_name">Display name</Label>
-                <Input
-                  id="display_name"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Ada Lovelace"
-                  className="h-11"
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>Profile photo</Label>
+              <AvatarUpload
+                userId={user!.id}
+                value={avatarUrl}
+                initials={initials}
+                onChange={setAvatarUrl}
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="avatar_url">Avatar URL (optional)</Label>
+              <Label htmlFor="display_name">Display name</Label>
               <Input
-                id="avatar_url"
-                type="url"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://..."
+                id="display_name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Ada Lovelace"
                 className="h-11"
+                required
               />
             </div>
           </section>
