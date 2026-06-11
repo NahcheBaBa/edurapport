@@ -96,6 +96,10 @@ const Navbar = () => {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
+                    <span className="flex items-center gap-1 text-sm font-bold text-foreground" title="Streak">
+                      0
+                      <Mic className="h-4 w-4 text-primary" />
+                    </span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
