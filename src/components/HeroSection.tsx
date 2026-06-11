@@ -49,12 +49,11 @@ const HeroSection = () => {
               
               Explore Subjects
             </Link>
-            <a
-              href="#demo"
+            <Link
+              to="/subjects"
               className="border-2 border-foreground text-foreground font-bold px-8 py-3 rounded-full text-sm hover:bg-muted transition-colors hover-scale">
-              
               learn for free
-            </a>
+            </Link>
           </div>
         </div>
       </div>
