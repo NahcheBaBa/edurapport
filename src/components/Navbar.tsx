@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Search, LogOut, User, Settings } from "lucide-react";
+import { Menu, X, Search, LogOut, User, Settings, Mic } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
@@ -96,6 +96,10 @@ const Navbar = () => {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
+                    <span className="flex items-center gap-1 text-sm font-bold text-foreground" title="Streak">
+                      0
+                      <Mic className="h-4 w-4 text-primary" />
+                    </span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
