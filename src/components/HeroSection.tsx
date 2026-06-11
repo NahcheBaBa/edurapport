@@ -53,7 +53,7 @@ const HeroSection = () => {
               href="#demo"
               className="border-2 border-foreground text-foreground font-bold px-8 py-3 rounded-full text-sm hover:bg-muted transition-colors hover-scale">
               
-              Take Demo test
+              learn for free
             </a>
           </div>
         </div>
