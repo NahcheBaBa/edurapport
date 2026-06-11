@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Search, LogOut, User, Settings } from "lucide-react";
+import { Menu, X, Search, LogOut, User, Settings, Mic } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
