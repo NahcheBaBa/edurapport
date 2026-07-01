@@ -33,9 +33,13 @@ const SubjectDetail = () => {
                   className="w-56 md:w-72 animate-float drop-shadow-xl"
                   style={{ animationDuration: "4s" }}
                 />
-                <div className="absolute -top-4 -right-4 md:-right-8 bg-card border-2 border-primary rounded-2xl rounded-bl-none px-4 py-2 shadow-lg max-w-[180px]">
+                <div className="absolute -top-4 -right-4 md:-right-8 bg-card border-2 border-primary rounded-2xl rounded-bl-none px-4 py-2 shadow-lg max-w-[180px] animate-scale-in origin-bottom-left hover:scale-105 hover:-rotate-2 transition-transform duration-300 cursor-default group">
+                  <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-accent animate-ping" />
+                  <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-accent" />
                   <p className="font-heading font-bold text-sm text-foreground leading-tight">
-                    Hello, Durling. Let's have a Rapport
+                    Hello, Durling. Let's have a{" "}
+                    <span className="inline-block text-primary group-hover:animate-bounce">Rapport</span>
+                    <span className="inline-block ml-1 animate-pulse">👋</span>
                   </p>
                 </div>
               </div>
