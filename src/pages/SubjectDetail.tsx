@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, PlayCircle, Music } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import subjectIllustration from "@/assets/subject-illustration.png";
+import ednaAsset from "@/assets/edna.gif.asset.json";
 import { Button } from "@/components/ui/button";
 import { getLessonsForSubject } from "@/data/lessons";
 
@@ -25,8 +25,20 @@ const SubjectDetail = () => {
           </Link>
 
           <div className="flex flex-col md:flex-row items-center gap-10 mb-16">
-            <div className="flex-shrink-0 w-64 md:w-[360px]">
-              <img src={subjectIllustration} alt={`${subjectName} illustration`} className="w-full" />
+            <div className="relative flex-shrink-0 w-64 md:w-[360px] flex justify-center">
+              <div className="relative">
+                <img
+                  src={ednaAsset.url}
+                  alt="Edna waving hello"
+                  className="w-56 md:w-72 animate-float drop-shadow-xl"
+                  style={{ animationDuration: "4s" }}
+                />
+                <div className="absolute -top-4 -right-4 md:-right-8 bg-card border-2 border-primary rounded-2xl rounded-bl-none px-4 py-2 shadow-lg max-w-[180px]">
+                  <p className="font-heading font-bold text-sm text-foreground leading-tight">
+                    Hello, Durling. Let's have a Rapport
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground mb-4">
