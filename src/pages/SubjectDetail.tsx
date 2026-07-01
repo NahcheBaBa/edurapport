@@ -32,6 +32,7 @@ const SubjectDetail = () => {
                   autoPlay
                   muted
                   playsInline
+                  aria-label="Edna waving hello"
                   className="w-56 md:w-72 animate-float drop-shadow-xl"
                   style={{ animationDuration: "4s", animationIterationCount: "1" }}
                 />
