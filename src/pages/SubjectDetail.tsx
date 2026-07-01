@@ -27,9 +27,11 @@ const SubjectDetail = () => {
           <div className="flex flex-col md:flex-row items-center gap-10 mb-16">
             <div className="relative flex-shrink-0 w-64 md:w-[360px] flex justify-center">
               <div className="relative">
-                <img
+                <video
                   src={ednaAsset.url}
-                  alt="Edna waving hello"
+                  autoPlay
+                  muted
+                  playsInline
                   className="w-56 md:w-72 animate-float drop-shadow-xl"
                   style={{ animationDuration: "4s", animationIterationCount: "1" }}
                 />
