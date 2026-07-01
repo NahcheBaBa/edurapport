@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, PlayCircle, Music } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ednaAsset from "@/assets/edna.gif.asset.json";
+import ednaAsset from "@/assets/edna.webm.asset.json";
 import { Button } from "@/components/ui/button";
 import { getLessonsForSubject } from "@/data/lessons";
 
