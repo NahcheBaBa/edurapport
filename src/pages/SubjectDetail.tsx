@@ -41,18 +41,18 @@ const SubjectDetail = () => {
             <div className="relative flex-shrink-0 w-64 md:w-[360px] flex justify-center">
               <div className="relative">
                 <img
-                  src={ednaAsset.url}
+                  src={playAnimation ? ednaAsset.url : `${ednaAsset.url}#static`}
                   alt="Edna waving hello"
-                  className="w-56 md:w-72 animate-float drop-shadow-xl"
+                  className={`w-56 md:w-72 drop-shadow-xl ${anim("animate-float")}`}
                   style={{ animationDuration: "4s", animationIterationCount: "1" }}
                 />
-                <div className="absolute -top-4 -right-4 md:-right-8 bg-card border-2 border-primary rounded-2xl rounded-bl-none px-4 py-2 shadow-lg max-w-[180px] animate-scale-in origin-bottom-left hover:scale-105 hover:-rotate-2 transition-transform duration-300 cursor-default group" style={{ animationIterationCount: "1" }}>
-                  <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-accent animate-ping" style={{ animationIterationCount: "1" }} />
+                <div className={`absolute -top-4 -right-4 md:-right-8 bg-card border-2 border-primary rounded-2xl rounded-bl-none px-4 py-2 shadow-lg max-w-[180px] origin-bottom-left hover:scale-105 hover:-rotate-2 transition-transform duration-300 cursor-default group ${anim("animate-scale-in")}`} style={{ animationIterationCount: "1" }}>
+                  <span className={`absolute -top-1 -right-1 h-3 w-3 rounded-full bg-accent ${anim("animate-ping")}`} style={{ animationIterationCount: "1" }} />
                   <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-accent" />
                   <p className="font-heading font-bold text-sm text-foreground leading-tight">
                     Hello, Durling. Let's have a{" "}
                     <span className="inline-block text-primary group-hover:animate-bounce" style={{ animationIterationCount: "1" }}>Rapport</span>
-                    <span className="inline-block ml-1 animate-pulse" style={{ animationIterationCount: "1" }}>👋</span>
+                    <span className={`inline-block ml-1 ${anim("animate-pulse")}`} style={{ animationIterationCount: "1" }}>👋</span>
                   </p>
                 </div>
               </div>
