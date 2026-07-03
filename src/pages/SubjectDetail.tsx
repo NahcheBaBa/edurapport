@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ArrowLeft, PlayCircle, Music } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,10 +7,22 @@ import ednaAsset from "@/assets/edna-once.gif.asset.json";
 import { Button } from "@/components/ui/button";
 import { getLessonsForSubject } from "@/data/lessons";
 
+const EDNA_SEEN_KEY = "edurapport-edna-animated";
+
 const SubjectDetail = () => {
   const { name } = useParams<{ name: string }>();
   const subjectName = decodeURIComponent(name || "");
   const lessons = getLessonsForSubject(subjectName);
+  const [playAnimation] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !sessionStorage.getItem(EDNA_SEEN_KEY);
+  });
+
+  useEffect(() => {
+    if (playAnimation) sessionStorage.setItem(EDNA_SEEN_KEY, "1");
+  }, [playAnimation]);
+
+  const anim = (cls: string) => (playAnimation ? cls : "");
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
