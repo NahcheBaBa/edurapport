@@ -14,7 +14,7 @@ import { getLessonById, getLessonsForSubject, LyricAnnotation } from "@/data/les
 import heroCharacter from "@/assets/hero-character.png";
 import fractalArt from "@/assets/fractal-art.jpg";
 import webDesignMath from "@/assets/web-design-math.jpg";
-import partsOfSpeechAudio from "@/assets/parts-of-speech.mp3";
+import partsOfSpeechAudio from "@/assets/parts-of-speech.mp3.asset.json";
 
 const cardImageMap: Record<string, string> = {
   "/assets/fractal-art.jpg": fractalArt,
@@ -22,7 +22,7 @@ const cardImageMap: Record<string, string> = {
 };
 
 const lessonAudioMap: Record<string, string> = {
-  "parts-of-speech": partsOfSpeechAudio,
+  "parts-of-speech": partsOfSpeechAudio.url,
 };
 
 

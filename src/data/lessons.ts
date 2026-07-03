@@ -1,3 +1,5 @@
+import partsOfSpeechAudio from "@/assets/parts-of-speech.mp3.asset.json";
+
 export interface LyricAnnotation {
   /** Substring of the lyric line that triggers the annotation */
   matchText: string;
@@ -140,7 +142,7 @@ Waiyo,`,
       },
     ],
     videoCaption: "Watch the video below to understand more about Parts of speech",
-    audioUrl: "/src/assets/parts-of-speech.mp3",
+    audioUrl: partsOfSpeechAudio.url,
 
     comments: [
       {
