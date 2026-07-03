@@ -22,7 +22,7 @@ const cardImageMap: Record<string, string> = {
 };
 
 const lessonAudioMap: Record<string, string> = {
-  "parts-of-speech": partsOfSpeechAudio,
+  "parts-of-speech": partsOfSpeechAudio.url,
 };
 
 
