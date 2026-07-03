@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, PlayCircle, Music } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ednaAsset from "@/assets/edna-once.gif.asset.json";
+import ednaAsset from "@/assets/edna-wave5.gif.asset.json";
 import { Button } from "@/components/ui/button";
 import { getLessonsForSubject } from "@/data/lessons";
 
