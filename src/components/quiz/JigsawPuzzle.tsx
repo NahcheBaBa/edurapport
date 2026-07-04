@@ -36,7 +36,7 @@ const JigsawPuzzle = ({ revealedPieces, totalPieces, imageSrc, cols, rows }: Jig
       >
         {/* Full image behind */}
         <img
-          src={pollockPainting}
+          src={src}
           alt="Puzzle artwork"
           className="absolute inset-0 w-full h-full object-cover"
         />
