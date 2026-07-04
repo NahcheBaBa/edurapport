@@ -219,7 +219,7 @@ const PartsOfSpeechQuiz = () => {
             {/* Right: Jigsaw puzzle */}
             <div className="lg:w-[380px] flex-shrink-0">
               <div className="lg:sticky lg:top-24">
-                <JigsawPuzzle imageSrc={partsOfSpeechArt.url} cols={5} rows={2}
+                <JigsawPuzzle imageSrc={partsOfSpeechArt.url} cols={5} rows={4}
                   revealedPieces={revealedPieces}
                   totalPieces={TOTAL_QUESTIONS}
                 />
