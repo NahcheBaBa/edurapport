@@ -9,6 +9,7 @@ import SubjectSelection from "./pages/SubjectSelection.tsx";
 import SubjectDetail from "./pages/SubjectDetail.tsx";
 import LessonDetail from "./pages/LessonDetail.tsx";
 import AlgebraQuiz from "./pages/AlgebraQuiz.tsx";
+import PartsOfSpeechQuiz from "./pages/PartsOfSpeechQuiz.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Login from "./pages/Login.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
