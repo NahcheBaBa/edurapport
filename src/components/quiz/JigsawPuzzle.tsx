@@ -4,12 +4,15 @@ import pollockPainting from "@/assets/pollock-painting.jpg";
 interface JigsawPuzzleProps {
   revealedPieces: Set<number>;
   totalPieces: number;
+  imageSrc?: string;
+  cols?: number;
+  rows?: number;
 }
 
-const COLS = 5;
-const ROWS = 4;
-
-const JigsawPuzzle = ({ revealedPieces, totalPieces }: JigsawPuzzleProps) => {
+const JigsawPuzzle = ({ revealedPieces, totalPieces, imageSrc, cols, rows }: JigsawPuzzleProps) => {
+  const COLS = cols ?? 5;
+  const ROWS = rows ?? 4;
+  const src = imageSrc ?? pollockPainting;
   const allRevealed = revealedPieces.size === totalPieces;
 
   // Shuffle mapping: question index -> grid position (deterministic)
@@ -33,7 +36,7 @@ const JigsawPuzzle = ({ revealedPieces, totalPieces }: JigsawPuzzleProps) => {
       >
         {/* Full image behind */}
         <img
-          src={pollockPainting}
+          src={src}
           alt="Puzzle artwork"
           className="absolute inset-0 w-full h-full object-cover"
         />
