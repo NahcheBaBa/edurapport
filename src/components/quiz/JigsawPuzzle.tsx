@@ -70,7 +70,7 @@ const JigsawPuzzle = ({ revealedPieces, totalPieces, imageSrc, cols, rows }: Jig
                 >
                   {!isRevealed && (
                     <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-6 h-6 rounded-sm border-2 border-dashed border-muted-foreground/20" />
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 rounded-sm border-2 border-dashed border-muted-foreground/20" />
                     </div>
                   )}
                 </div>
