@@ -217,8 +217,8 @@ const PartsOfSpeechQuiz = () => {
             </div>
 
             {/* Right: Jigsaw puzzle */}
-            <div className="lg:w-[380px] flex-shrink-0">
-              <div className="lg:sticky lg:top-24">
+            <div className="w-full lg:w-[380px] lg:flex-shrink-0 order-first lg:order-last">
+              <div className="lg:sticky lg:top-24 max-w-md mx-auto lg:max-w-none">
                 <JigsawPuzzle imageSrc={partsOfSpeechArt.url} cols={5} rows={4}
                   revealedPieces={revealedPieces}
                   totalPieces={TOTAL_QUESTIONS}
