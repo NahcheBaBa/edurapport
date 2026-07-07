@@ -8,6 +8,7 @@ import JigsawPuzzle from "@/components/quiz/JigsawPuzzle";
 import QuizQuestionComponent from "@/components/quiz/QuizQuestion";
 import { algebraQuizQuestions } from "@/data/quizQuestions";
 import { useSpeech } from "@/hooks/use-speech";
+import { useRewards } from "@/hooks/use-rewards";
 
 const TOTAL_QUESTIONS = algebraQuizQuestions.length;
 
@@ -17,6 +18,7 @@ const AlgebraQuiz = () => {
   const [revealedPieces, setRevealedPieces] = useState<Set<number>>(new Set());
   const [audioOn, setAudioOn] = useState(false);
   const { speak, stop, isSpeaking, rate, setRate } = useSpeech();
+  const { applyActivity } = useRewards();
 
   const correctCount = revealedPieces.size;
   const allAnswered = answers.size === TOTAL_QUESTIONS;
@@ -29,11 +31,13 @@ const AlgebraQuiz = () => {
 
       setAnswers((prev) => new Map(prev).set(q.id, optionIndex));
 
-      if (optionIndex === q.correctIndex) {
+      const isCorrect = optionIndex === q.correctIndex;
+      if (isCorrect) {
         setRevealedPieces((prev) => new Set(prev).add(currentQuestion));
       }
+      applyActivity({ correct: isCorrect, kind: "quiz-answer" });
     },
-    [currentQuestion, answers]
+    [currentQuestion, answers, applyActivity]
   );
 
   const goNext = () => {
