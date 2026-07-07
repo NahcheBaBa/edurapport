@@ -89,6 +89,20 @@ const Navbar = () => {
           {user ? (
             <>
               <NotificationBell />
+              <RouterLink
+                to="/rewards"
+                className="flex items-center gap-2 text-xs font-bold text-foreground hover:text-primary px-2.5 py-1.5 rounded-full border border-border bg-background transition-colors"
+                title="View rewards"
+              >
+                <span className="inline-flex items-center gap-1" aria-label={`${rewards.streak} day streak`}>
+                  <Flame className="h-3.5 w-3.5 text-primary" aria-hidden />
+                  {rewards.streak}
+                </span>
+                <span className="inline-flex items-center gap-1" aria-label={`${rewards.coins} coins`}>
+                  <Coins className="h-3.5 w-3.5 text-primary" aria-hidden />
+                  {rewards.coins}
+                </span>
+              </RouterLink>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative flex items-center gap-2 outline-none">
@@ -100,21 +114,6 @@ const Navbar = () => {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
-                    <RouterLink
-                      to="/rewards"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 text-xs font-bold text-foreground hover:text-primary"
-                      title="View rewards"
-                    >
-                      <span className="inline-flex items-center gap-1" aria-label={`${rewards.streak} day streak`}>
-                        <Flame className="h-3.5 w-3.5 text-primary" />
-                        {rewards.streak}
-                      </span>
-                      <span className="inline-flex items-center gap-1" aria-label={`${rewards.coins} coins`}>
-                        <Coins className="h-3.5 w-3.5 text-primary" />
-                        {rewards.coins}
-                      </span>
-                    </RouterLink>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
