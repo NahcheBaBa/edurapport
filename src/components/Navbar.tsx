@@ -17,6 +17,7 @@ import {
 
 const navLinks = [
 { label: "Subjects", to: "/subjects" },
+{ label: "Rewards", to: "/rewards" },
 { label: "About us", to: "/about" },
 { label: "Contact us", href: "#contact" }];
 

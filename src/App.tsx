@@ -17,6 +17,8 @@ import ResetPassword from "./pages/ResetPassword.tsx";
 import About from "./pages/About.tsx";
 import ProfileSetup from "./pages/ProfileSetup.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Rewards from "./pages/Rewards.tsx";
+import RewardToaster from "@/components/rewards/RewardToaster";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -26,6 +28,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AccessibilityMenu />
+        <RewardToaster />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/subjects" element={<SubjectSelection />} />
@@ -41,6 +44,7 @@ const App = () => (
           <Route path="/profile-setup" element={<ProfileSetup />} />
           <Route path="/profile" element={<ProfileSetup />} />
           <Route path="/welcome" element={<ProfileSetup />} />
+          <Route path="/rewards" element={<Rewards />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
