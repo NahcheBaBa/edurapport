@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Search, LogOut, User, Settings, Mic } from "lucide-react";
+import { Menu, X, Search, LogOut, User, Settings, Flame, Coins } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
+import { useRewards } from "@/hooks/use-rewards";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,6 +19,7 @@ import {
 
 const navLinks = [
 { label: "Subjects", to: "/subjects" },
+{ label: "Rewards", to: "/rewards" },
 { label: "About us", to: "/about" },
 { label: "Contact us", href: "#contact" }];
 
@@ -26,6 +29,7 @@ const Navbar = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<{ display_name?: string | null; avatar_url?: string | null } | null>(null);
+  const { state: rewards } = useRewards();
 
   useEffect(() => {
     if (!user) { setProfile(null); return; }
@@ -85,6 +89,20 @@ const Navbar = () => {
           {user ? (
             <>
               <NotificationBell />
+              <RouterLink
+                to="/rewards"
+                className="flex items-center gap-2 text-xs font-bold text-foreground hover:text-primary px-2.5 py-1.5 rounded-full border border-border bg-background transition-colors"
+                title="View rewards"
+              >
+                <span className="inline-flex items-center gap-1" aria-label={`${rewards.streak} day streak`}>
+                  <Flame className="h-3.5 w-3.5 text-primary" aria-hidden />
+                  {rewards.streak}
+                </span>
+                <span className="inline-flex items-center gap-1" aria-label={`${rewards.coins} coins`}>
+                  <Coins className="h-3.5 w-3.5 text-primary" aria-hidden />
+                  {rewards.coins}
+                </span>
+              </RouterLink>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative flex items-center gap-2 outline-none">
@@ -96,10 +114,6 @@ const Navbar = () => {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="flex items-center gap-1 text-sm font-bold text-foreground" title="Streak">
-                      0
-                      <Mic className="h-4 w-4 text-primary" />
-                    </span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
