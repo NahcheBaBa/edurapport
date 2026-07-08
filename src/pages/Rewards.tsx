@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import StreakCard from "@/components/rewards/StreakCard";
 import FocusTimer from "@/components/rewards/FocusTimer";
 import EdnaRoom from "@/components/rewards/EdnaRoom";
+import BadgesGrid from "@/components/rewards/BadgesGrid";
 import { useRewards } from "@/hooks/use-rewards";
 
 const Rewards = () => {
@@ -74,6 +75,7 @@ const Rewards = () => {
 
           <div className="grid gap-6">
             <StreakCard />
+            <BadgesGrid />
             <FocusTimer />
             <EdnaRoom />
           </div>

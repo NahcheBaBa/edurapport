@@ -24,7 +24,7 @@ const BREAK_PROMPTS = [
 ];
 
 const FocusTimer = () => {
-  const { state, applyActivity } = useRewards();
+  const { state, applyActivity, completeFocusSession } = useRewards();
   const [presetIdx, setPresetIdx] = useState(1);
   const preset = PRESETS[presetIdx];
   const [phase, setPhase] = useState<"focus" | "break">("focus");
@@ -56,6 +56,7 @@ const FocusTimer = () => {
     if (phase === "focus" && !awardedRef.current) {
       awardedRef.current = true;
       applyActivity({ effortOnly: true, kind: "focus-session" });
+      completeFocusSession();
       if (state.settings.sound) chime();
       setPromptIdx(Math.floor(Math.random() * BREAK_PROMPTS.length));
       setPhase("break");

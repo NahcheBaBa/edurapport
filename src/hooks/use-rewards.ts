@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
  * Keeps things predictable for neurodivergent learners:
  * - Rewards effort (any attempt earns a small coin) AND accuracy (bigger reward for correct).
  * - Streak counts a "day" as any day with at least one activity — no punishment for effort days.
+ * - Milestone badges are unlocked from the same state, so they stay in sync with progress.
  * - All celebrations respect the `lowStim` setting.
  */
 
@@ -31,14 +32,158 @@ export const SHOP_ITEMS: RoomItem[] = [
   { id: "pet-owl", name: "Wise Owl", emoji: "🦉", price: 45, slot: "companion" },
 ];
 
+export type Achievement = {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  group: "streak" | "quiz" | "daily" | "coins" | "focus";
+  coinReward: number;
+  /** Returns true when the state qualifies for this badge. */
+  isEarned: (s: RewardsState) => boolean;
+  /** Optional progress display (current / target). */
+  progress?: (s: RewardsState) => { current: number; target: number };
+};
+
+export const ACHIEVEMENTS: Achievement[] = [
+  {
+    id: "first-step",
+    name: "First Step",
+    description: "Complete your very first activity.",
+    emoji: "🌱",
+    group: "quiz",
+    coinReward: 5,
+    isEarned: (s) => s.totalActivities >= 1,
+    progress: (s) => ({ current: Math.min(s.totalActivities, 1), target: 1 }),
+  },
+  {
+    id: "quiz-rookie",
+    name: "Quiz Rookie",
+    description: "Finish a full quiz set from start to end.",
+    emoji: "📘",
+    group: "quiz",
+    coinReward: 10,
+    isEarned: (s) => s.quizSetsCompleted >= 1,
+    progress: (s) => ({ current: Math.min(s.quizSetsCompleted, 1), target: 1 }),
+  },
+  {
+    id: "quiz-explorer",
+    name: "Quiz Explorer",
+    description: "Complete 5 quiz sets.",
+    emoji: "🧭",
+    group: "quiz",
+    coinReward: 25,
+    isEarned: (s) => s.quizSetsCompleted >= 5,
+    progress: (s) => ({ current: Math.min(s.quizSetsCompleted, 5), target: 5 }),
+  },
+  {
+    id: "perfect-mind",
+    name: "Perfect Mind",
+    description: "Score 100% on a quiz set.",
+    emoji: "🏆",
+    group: "quiz",
+    coinReward: 30,
+    isEarned: (s) => s.perfectQuizSets >= 1,
+    progress: (s) => ({ current: Math.min(s.perfectQuizSets, 1), target: 1 }),
+  },
+  {
+    id: "streak-3",
+    name: "Warming Up",
+    description: "Show up 3 days in a row.",
+    emoji: "🔥",
+    group: "streak",
+    coinReward: 15,
+    isEarned: (s) => s.streak >= 3 || s.longestStreak >= 3,
+    progress: (s) => ({ current: Math.min(Math.max(s.streak, s.longestStreak), 3), target: 3 }),
+  },
+  {
+    id: "streak-7",
+    name: "Week Strong",
+    description: "Show up 7 days in a row.",
+    emoji: "💪",
+    group: "streak",
+    coinReward: 40,
+    isEarned: (s) => s.streak >= 7 || s.longestStreak >= 7,
+    progress: (s) => ({ current: Math.min(Math.max(s.streak, s.longestStreak), 7), target: 7 }),
+  },
+  {
+    id: "streak-30",
+    name: "Monthly Habit",
+    description: "A 30-day streak. Wow.",
+    emoji: "🌟",
+    group: "streak",
+    coinReward: 100,
+    isEarned: (s) => s.streak >= 30 || s.longestStreak >= 30,
+    progress: (s) => ({ current: Math.min(Math.max(s.streak, s.longestStreak), 30), target: 30 }),
+  },
+  {
+    id: "daily-goal-1",
+    name: "Goal Getter",
+    description: "Hit your daily goal for the first time.",
+    emoji: "🎯",
+    group: "daily",
+    coinReward: 10,
+    isEarned: (s) => s.dailyGoalsHit >= 1,
+    progress: (s) => ({ current: Math.min(s.dailyGoalsHit, 1), target: 1 }),
+  },
+  {
+    id: "daily-goal-7",
+    name: "Consistent",
+    description: "Hit your daily goal 7 times.",
+    emoji: "📅",
+    group: "daily",
+    coinReward: 35,
+    isEarned: (s) => s.dailyGoalsHit >= 7,
+    progress: (s) => ({ current: Math.min(s.dailyGoalsHit, 7), target: 7 }),
+  },
+  {
+    id: "coins-100",
+    name: "Coin Collector",
+    description: "Earn 100 coins in total.",
+    emoji: "🪙",
+    group: "coins",
+    coinReward: 10,
+    isEarned: (s) => s.totalCoinsEarned >= 100,
+    progress: (s) => ({ current: Math.min(s.totalCoinsEarned, 100), target: 100 }),
+  },
+  {
+    id: "coins-500",
+    name: "Treasure Keeper",
+    description: "Earn 500 coins in total.",
+    emoji: "💎",
+    group: "coins",
+    coinReward: 50,
+    isEarned: (s) => s.totalCoinsEarned >= 500,
+    progress: (s) => ({ current: Math.min(s.totalCoinsEarned, 500), target: 500 }),
+  },
+  {
+    id: "focus-first",
+    name: "Deep Focus",
+    description: "Finish your first focus timer session.",
+    emoji: "⏳",
+    group: "focus",
+    coinReward: 10,
+    isEarned: (s) => s.focusSessionsCompleted >= 1,
+    progress: (s) => ({ current: Math.min(s.focusSessionsCompleted, 1), target: 1 }),
+  },
+];
+
 export type RewardsState = {
   coins: number;
+  totalCoinsEarned: number;
   streak: number;
+  longestStreak: number;
   lastActiveDate: string | null; // yyyy-mm-dd
   dailyGoal: number; // number of activities per day
   todayCount: number;
   todayDate: string | null;
   totalActivities: number;
+  quizSetsCompleted: number;
+  perfectQuizSets: number;
+  dailyGoalsHit: number;
+  focusSessionsCompleted: number;
+  completedQuizKeys: string[]; // dedup key per quiz-set completion
+  unlockedBadges: string[];
   ownedItems: string[];
   equipped: Partial<Record<RoomItem["slot"], string>>;
   settings: {
@@ -62,12 +207,20 @@ const dayDiff = (a: string, b: string) => {
 
 const defaultState: RewardsState = {
   coins: 0,
+  totalCoinsEarned: 0,
   streak: 0,
+  longestStreak: 0,
   lastActiveDate: null,
   dailyGoal: 3,
   todayCount: 0,
   todayDate: null,
   totalActivities: 0,
+  quizSetsCompleted: 0,
+  perfectQuizSets: 0,
+  dailyGoalsHit: 0,
+  focusSessionsCompleted: 0,
+  completedQuizKeys: [],
+  unlockedBadges: [],
   ownedItems: [],
   equipped: {},
   settings: { lowStim: false, sound: true },
@@ -79,7 +232,11 @@ function readState(): RewardsState {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultState;
     const parsed = JSON.parse(raw) as Partial<RewardsState>;
-    return { ...defaultState, ...parsed, settings: { ...defaultState.settings, ...(parsed.settings || {}) } };
+    return {
+      ...defaultState,
+      ...parsed,
+      settings: { ...defaultState.settings, ...(parsed.settings || {}) },
+    };
   } catch {
     return defaultState;
   }
@@ -98,6 +255,7 @@ export type RewardEvent = {
   coinsDelta: number;
   message: string;
   celebrate: boolean;
+  badge?: Achievement;
 };
 
 let lastEvent: RewardEvent | null = null;
@@ -119,6 +277,32 @@ export function useRewardEvents(cb: (e: RewardEvent) => void) {
 
 export function getLastRewardEvent() {
   return lastEvent;
+}
+
+/**
+ * Unlock any newly-earned badges based on the given state.
+ * Returns the updated state plus the list of freshly-unlocked achievements
+ * (with their coin rewards already added to `coins` / `totalCoinsEarned`).
+ */
+function evaluateBadges(state: RewardsState): { state: RewardsState; unlocked: Achievement[] } {
+  const unlocked: Achievement[] = [];
+  let coins = state.coins;
+  let totalCoinsEarned = state.totalCoinsEarned;
+  const owned = new Set(state.unlockedBadges);
+
+  for (const a of ACHIEVEMENTS) {
+    if (owned.has(a.id)) continue;
+    if (a.isEarned(state)) {
+      owned.add(a.id);
+      coins += a.coinReward;
+      totalCoinsEarned += a.coinReward;
+      unlocked.push(a);
+    }
+  }
+  return {
+    state: { ...state, coins, totalCoinsEarned, unlockedBadges: Array.from(owned) },
+    unlocked,
+  };
 }
 
 export function useRewards() {
@@ -164,19 +348,25 @@ export function useRewards() {
       if (opts.correct) coinsDelta = 5;
       if (opts.effortOnly) coinsDelta = 1;
 
-      const todayCount = (current.todayDate === t ? current.todayCount : 0) + 1;
+      const wasNewDay = current.todayDate !== t;
+      const todayCount = (wasNewDay ? 0 : current.todayCount) + 1;
       const reachedGoal = todayCount === current.dailyGoal;
       if (reachedGoal) coinsDelta += 10;
 
-      const next: RewardsState = {
+      const merged: RewardsState = {
         ...current,
         coins: current.coins + coinsDelta,
+        totalCoinsEarned: current.totalCoinsEarned + coinsDelta,
         streak,
+        longestStreak: Math.max(current.longestStreak, streak),
         lastActiveDate: t,
         todayDate: t,
         todayCount,
         totalActivities: current.totalActivities + 1,
+        dailyGoalsHit: current.dailyGoalsHit + (reachedGoal ? 1 : 0),
       };
+
+      const { state: next, unlocked } = evaluateBadges(merged);
       writeState(next);
       setState(next);
 
@@ -192,10 +382,89 @@ export function useRewards() {
         celebrate: reachedGoal,
       };
       emit(evt);
+      // Emit a follow-up event for each newly unlocked badge.
+      unlocked.forEach((a, i) => {
+        window.setTimeout(() => {
+          emit({
+            coinsDelta: a.coinReward,
+            message: `Badge unlocked: ${a.name}! +${a.coinReward} coins`,
+            celebrate: true,
+            badge: a,
+          });
+        }, 700 + i * 900);
+      });
       return evt;
     },
     []
   );
+
+  /**
+   * Called once when a quiz set is finished. Deduped by `key` so replays
+   * don't inflate stats. `correct` / `total` count final scored answers.
+   */
+  const completeQuizSet = useCallback(
+    (opts: { key: string; correct: number; total: number }) => {
+      const current = readState();
+      if (current.completedQuizKeys.includes(opts.key)) return;
+
+      const bonus = opts.correct === opts.total ? 25 : 10;
+      const merged: RewardsState = {
+        ...current,
+        coins: current.coins + bonus,
+        totalCoinsEarned: current.totalCoinsEarned + bonus,
+        quizSetsCompleted: current.quizSetsCompleted + 1,
+        perfectQuizSets: current.perfectQuizSets + (opts.correct === opts.total ? 1 : 0),
+        completedQuizKeys: [...current.completedQuizKeys, opts.key],
+      };
+      const { state: next, unlocked } = evaluateBadges(merged);
+      writeState(next);
+      setState(next);
+
+      emit({
+        coinsDelta: bonus,
+        message:
+          opts.correct === opts.total
+            ? `Perfect set! +${bonus} coins`
+            : `Quiz set complete! +${bonus} coins`,
+        celebrate: true,
+      });
+      unlocked.forEach((a, i) => {
+        window.setTimeout(() => {
+          emit({
+            coinsDelta: a.coinReward,
+            message: `Badge unlocked: ${a.name}! +${a.coinReward} coins`,
+            celebrate: true,
+            badge: a,
+          });
+        }, 700 + i * 900);
+      });
+    },
+    []
+  );
+
+  const completeFocusSession = useCallback(() => {
+    const current = readState();
+    const merged: RewardsState = {
+      ...current,
+      focusSessionsCompleted: current.focusSessionsCompleted + 1,
+      coins: current.coins + 5,
+      totalCoinsEarned: current.totalCoinsEarned + 5,
+    };
+    const { state: next, unlocked } = evaluateBadges(merged);
+    writeState(next);
+    setState(next);
+    emit({ coinsDelta: 5, message: "Focus session done. +5 coins", celebrate: false });
+    unlocked.forEach((a, i) => {
+      window.setTimeout(() => {
+        emit({
+          coinsDelta: a.coinReward,
+          message: `Badge unlocked: ${a.name}! +${a.coinReward} coins`,
+          celebrate: true,
+          badge: a,
+        });
+      }, 700 + i * 900);
+    });
+  }, []);
 
   const buyItem = useCallback((id: string) => {
     const item = SHOP_ITEMS.find((i) => i.id === id);
@@ -246,5 +515,15 @@ export function useRewards() {
     setState(defaultState);
   }, []);
 
-  return { state, applyActivity, buyItem, equipItem, setDailyGoal, updateSettings, resetAll };
+  return {
+    state,
+    applyActivity,
+    completeQuizSet,
+    completeFocusSession,
+    buyItem,
+    equipItem,
+    setDailyGoal,
+    updateSettings,
+    resetAll,
+  };
 }
