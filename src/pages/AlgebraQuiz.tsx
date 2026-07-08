@@ -18,11 +18,21 @@ const AlgebraQuiz = () => {
   const [revealedPieces, setRevealedPieces] = useState<Set<number>>(new Set());
   const [audioOn, setAudioOn] = useState(false);
   const { speak, stop, isSpeaking, rate, setRate } = useSpeech();
-  const { applyActivity } = useRewards();
+  const { applyActivity, completeQuizSet } = useRewards();
 
   const correctCount = revealedPieces.size;
   const allAnswered = answers.size === TOTAL_QUESTIONS;
   const allCorrect = correctCount === TOTAL_QUESTIONS;
+
+  useEffect(() => {
+    if (allAnswered) {
+      completeQuizSet({
+        key: `algebra:${TOTAL_QUESTIONS}`,
+        correct: correctCount,
+        total: TOTAL_QUESTIONS,
+      });
+    }
+  }, [allAnswered, correctCount, completeQuizSet]);
 
   const handleAnswer = useCallback(
     (optionIndex: number) => {

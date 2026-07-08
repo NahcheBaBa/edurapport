@@ -29,7 +29,9 @@ const RewardToaster = () => {
         lowStim ? "" : "animate-in fade-in-0 slide-in-from-bottom-4 duration-300"
       }`}
     >
-      {event.celebrate ? (
+      {event.badge ? (
+        <span className="text-lg leading-none" aria-hidden>{event.badge.emoji}</span>
+      ) : event.celebrate ? (
         <Sparkles className={`h-4 w-4 text-primary ${lowStim ? "" : "animate-pulse"}`} aria-hidden />
       ) : (
         <Coins className="h-4 w-4 text-primary" aria-hidden />
