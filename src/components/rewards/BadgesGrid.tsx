@@ -1,5 +1,156 @@
-import { Lock } from "lucide-react";
+import { Download, Lock } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { ACHIEVEMENTS, useRewards, type Achievement } from "@/hooks/use-rewards";
+import { useToast } from "@/hooks/use-toast";
+
+const canvasText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number) => {
+  let size = 64;
+  ctx.font = `700 ${size}px "Nunito", sans-serif`;
+  while (ctx.measureText(text).width > maxWidth && size > 34) {
+    size -= 2;
+    ctx.font = `700 ${size}px "Nunito", sans-serif`;
+  }
+  ctx.fillText(text, x, y, maxWidth);
+};
+
+const wrapCanvasText = (
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number,
+) => {
+  const words = text.split(/\s+/);
+  let line = "";
+  let lineY = y;
+  for (const word of words) {
+    const nextLine = line ? `${line} ${word}` : word;
+    if (ctx.measureText(nextLine).width > maxWidth && line) {
+      ctx.fillText(line, x, lineY);
+      line = word;
+      lineY += lineHeight;
+    } else {
+      line = nextLine;
+    }
+  }
+  if (line) ctx.fillText(line, x, lineY);
+};
+
+const downloadBadgeCard = async (achievement: Achievement) => {
+  await document.fonts.ready;
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 630;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas could not be created");
+
+  const styles = getComputedStyle(document.documentElement);
+  const token = (name: string, fallback: string) => styles.getPropertyValue(name).trim() || fallback;
+  const primary = `hsl(${token("--primary", "28 100% 55%")})`;
+  const accent = `hsl(${token("--accent", "330 85% 55%")})`;
+  const background = `hsl(${token("--background", "0 0% 100%")})`;
+  const foreground = `hsl(${token("--foreground", "270 60% 30%")})`;
+  const muted = `hsl(${token("--muted-foreground", "240 5% 45%")})`;
+  const border = `hsl(${token("--border", "240 6% 90%")})`;
+
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(26, 26, 1148, 578);
+
+  const gradient = ctx.createLinearGradient(28, 40, 470, 580);
+  gradient.addColorStop(0, primary);
+  gradient.addColorStop(1, accent);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(28, 28, 420, 574);
+
+  ctx.save();
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = background;
+  ctx.beginPath();
+  ctx.arc(92, 102, 158, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(422, 554, 184, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = foreground;
+  ctx.font = '800 22px "Poppins", sans-serif';
+  ctx.fillText("EDURAPPORT", 72, 86);
+
+  ctx.fillStyle = background;
+  ctx.beginPath();
+  ctx.arc(238, 300, 128, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = `${foreground}33`;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.save();
+  ctx.translate(238, 300);
+  ctx.beginPath();
+  for (let point = 0; point < 10; point += 1) {
+    const angle = -Math.PI / 2 + (point * Math.PI) / 5;
+    const radius = point % 2 === 0 ? 82 : 38;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    if (point === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  const emblem = ctx.createLinearGradient(-70, -70, 70, 70);
+  emblem.addColorStop(0, primary);
+  emblem.addColorStop(1, accent);
+  ctx.fillStyle = emblem;
+  ctx.fill();
+  ctx.strokeStyle = background;
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  ctx.restore();
+
+  ctx.fillStyle = primary;
+  ctx.font = '800 20px "Poppins", sans-serif';
+  ctx.fillText("ACHIEVEMENT UNLOCKED", 504, 156);
+
+  ctx.fillStyle = foreground;
+  canvasText(ctx, achievement.name, 504, 246, 610);
+
+  ctx.fillStyle = muted;
+  ctx.font = '500 27px "Nunito", sans-serif';
+  wrapCanvasText(ctx, achievement.description, 506, 306, 590, 38);
+
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(504, 400);
+  ctx.lineTo(1118, 400);
+  ctx.stroke();
+
+  ctx.fillStyle = foreground;
+  ctx.font = '800 24px "Poppins", sans-serif';
+  ctx.fillText(`+${achievement.coinReward} COINS`, 506, 454);
+  ctx.fillStyle = muted;
+  ctx.font = '600 18px "Nunito", sans-serif';
+  ctx.fillText("A little progress adds up.", 506, 506);
+  ctx.textAlign = "right";
+  ctx.fillText("EDURAPPORT  ·  LEARN AT YOUR PACE", 1118, 558);
+  ctx.textAlign = "left";
+
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+  if (!blob) throw new Error("The badge image could not be saved");
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `edurapport-${achievement.id}-badge.png`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 
 const groupLabels: Record<Achievement["group"], string> = {
   quiz: "Learning milestones",
@@ -11,6 +162,8 @@ const groupLabels: Record<Achievement["group"], string> = {
 
 const BadgesGrid = () => {
   const { state } = useRewards();
+  const { toast } = useToast();
+  const [downloadingBadge, setDownloadingBadge] = useState<string | null>(null);
   const unlocked = new Set(state.unlockedBadges);
   const totalCount = ACHIEVEMENTS.length;
   const unlockedCount = ACHIEVEMENTS.filter((a) => unlocked.has(a.id)).length;
@@ -88,9 +241,33 @@ const BadgesGrid = () => {
                       </div>
                     )}
                     {earned && (
-                      <div className="text-[10px] font-bold text-primary mt-2 uppercase tracking-wide">
-                        +{a.coinReward} coins
-                      </div>
+                      <>
+                        <div className="text-[10px] font-bold text-primary mt-2 uppercase tracking-wide">
+                          +{a.coinReward} coins
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="mt-3 w-full gap-1.5 px-2 text-[11px]"
+                          disabled={downloadingBadge !== null}
+                          aria-label={`Download share card for ${a.name}`}
+                          onClick={async () => {
+                            setDownloadingBadge(a.id);
+                            try {
+                              await downloadBadgeCard(a);
+                              toast({ title: "Badge card downloaded", description: `${a.name} is ready to share.` });
+                            } catch {
+                              toast({ title: "Couldn't create the badge card", description: "Please try downloading it again." });
+                            } finally {
+                              setDownloadingBadge(null);
+                            }
+                          }}
+                        >
+                          <Download className="h-3.5 w-3.5" aria-hidden />
+                          {downloadingBadge === a.id ? "Creating…" : "Download card"}
+                        </Button>
+                      </>
                     )}
                     {!earned && !prog && (
                       <Lock className="h-3 w-3 text-muted-foreground absolute top-2 right-2" aria-hidden />
