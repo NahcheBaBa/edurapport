@@ -89,12 +89,27 @@ const downloadBadgeCard = async (achievement: Achievement) => {
   ctx.strokeStyle = `${foreground}33`;
   ctx.lineWidth = 2;
   ctx.stroke();
-  ctx.font = '104px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(achievement.emoji, 238, 300);
-  ctx.textAlign = "left";
-  ctx.textBaseline = "alphabetic";
+  ctx.save();
+  ctx.translate(238, 300);
+  ctx.beginPath();
+  for (let point = 0; point < 10; point += 1) {
+    const angle = -Math.PI / 2 + (point * Math.PI) / 5;
+    const radius = point % 2 === 0 ? 82 : 38;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    if (point === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  const emblem = ctx.createLinearGradient(-70, -70, 70, 70);
+  emblem.addColorStop(0, primary);
+  emblem.addColorStop(1, accent);
+  ctx.fillStyle = emblem;
+  ctx.fill();
+  ctx.strokeStyle = background;
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  ctx.restore();
 
   ctx.fillStyle = primary;
   ctx.font = '800 20px "Poppins", sans-serif';
