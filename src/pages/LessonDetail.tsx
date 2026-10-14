@@ -10,6 +10,9 @@ import { Slider } from "@/components/ui/slider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useSavedLessons } from "@/hooks/use-saved-lessons";
+import { toast } from "@/hooks/use-toast";
 import { getLessonById, getLessonsForSubject, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
 import fractalArt from "@/assets/fractal-art.jpg";
@@ -29,7 +32,8 @@ const lessonAudioMap: Record<string, string> = {
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const lesson = getLessonById(lessonId || "");
-  const [liked, setLiked] = useState(false);
+  const { user } = useAuth();
+  const { savedLessonIds, loading: savedLessonsLoading, toggleSavedLesson } = useSavedLessons();
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState(lesson?.comments || []);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -110,6 +114,7 @@ const LessonDetail = () => {
 
 
   const navigate = useNavigate();
+  const liked = lesson ? savedLessonIds.includes(lesson.id) : false;
 
   // Next / previous lessons within the same subject
   const subjectLessons = lesson ? getLessonsForSubject(lesson.subject) : [];
@@ -499,7 +504,27 @@ const LessonDetail = () => {
                 </div>
 
                 {/* Like */}
-                <button onClick={() => setLiked(!liked)} className="transition-colors">
+                <button
+                  type="button"
+                  aria-label={liked ? "Remove from saved songs and poetry" : "Save song or poem to profile"}
+                  aria-pressed={liked}
+                  title={liked ? "Remove from saved items" : "Save to your profile"}
+                  disabled={savedLessonsLoading}
+                  onClick={async () => {
+                    if (!user) {
+                      toast({ title: "Sign in to save this song or poem", description: "Your saved lessons will be available from your profile." });
+                      navigate("/login", { state: { from: `/lessons/${lesson.id}` } });
+                      return;
+                    }
+                    try {
+                      const saved = await toggleSavedLesson(lesson.id);
+                      toast({ title: saved ? "Added to your saved songs and poetry" : "Removed from saved items" });
+                    } catch {
+                      toast({ title: "Couldn't update your saved items", description: "Please try again.", variant: "destructive" });
+                    }
+                  }}
+                  className="transition-colors disabled:opacity-50"
+                >
                   <Heart
                     size={22}
                     className={liked ? "fill-accent text-accent" : "text-muted-foreground"}
