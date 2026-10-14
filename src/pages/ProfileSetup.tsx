@@ -20,6 +20,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import AvatarUpload from "@/components/AvatarUpload";
+import SavedLessonsPanel from "@/components/profile/SavedLessonsPanel";
 
 const SUBJECTS = [
   "English",
@@ -333,6 +334,7 @@ const ProfileSetup = () => {
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditMode ? "Save changes" : "Save and continue"}
           </Button>
         </form>
+        {isEditMode && <SavedLessonsPanel />}
       </main>
     </div>
   );

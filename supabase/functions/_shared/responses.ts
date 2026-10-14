@@ -1,9 +1,10 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { streamText, type ModelMessage } from "ai";
+import { createOpenAI } from "npm:@ai-sdk/openai";
+import { streamText, type ModelMessage } from "npm:ai";
 
 import {
   createLovableAiGatewayRunIdFetch,
   getLovableAiGatewayRunId,
+  getLovableAiGatewayResponseHeaders,
   withLovableAiGatewayRunIdHeader,
 } from "./run-id.ts";
 
@@ -46,8 +47,8 @@ export function createResponsesCall(
     response: () =>
       withLovableAiGatewayRunIdHeader(result.toUIMessageStreamResponse({ sendReasoning: true }), runIdFetch),
     responseHeaders: async (init?: HeadersInit) => {
+      const headers = getLovableAiGatewayResponseHeaders(undefined, init);
       const runId = await runIdFetch.waitForRunId();
-      const headers = new Headers(init);
       if (runId) headers.set("X-Lovable-AIG-Run-ID", runId);
       return headers;
     },
