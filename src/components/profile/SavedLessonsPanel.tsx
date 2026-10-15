@@ -105,7 +105,7 @@ const SavedLessonsPanel = () => {
         <form onSubmit={getRecommendation} className="space-y-3">
           <Textarea value={mood} onChange={(event) => setMood(event.target.value)} placeholder="I’m feeling overwhelmed and need something calming…" aria-label="Describe your mood or what support you need" maxLength={500} rows={3} disabled={savedLessons.length === 0 || loading || recommending} />
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="text-xs text-muted-foreground">{savedLessons.length === 0 ? "Save a song or poem first to get a recommendation." : "Your message is used only to find a helpful saved item."}</span>
+            <span className="text-xs text-muted-foreground">{savedLessons.length === 0 ? "Save a song or poem first to get a recommendation." : "Your message is sent to AI for matching and isn’t saved to your profile."}</span>
             <Button type="submit" disabled={!mood.trim() || savedLessons.length === 0 || loading || recommending} className="gradient-primary text-primary-foreground">
               {recommending ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />Finding a match…</> : <><Sparkles className="h-4 w-4" aria-hidden="true" />Recommend a saved item</>}
             </Button>
