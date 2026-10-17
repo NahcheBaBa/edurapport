@@ -24,6 +24,19 @@ const navLinks = [
 { label: "About us", to: "/about" },
 { label: "Contact us", href: "#contact" }];
 
+const searchableSubjects = [
+  "English",
+  "Biology",
+  "Physics",
+  "Science",
+  "Chemistry",
+  "Mathematics",
+  "Literature",
+  "Government",
+  "Social & Emotional Learning",
+  "Civic Education",
+];
+
 type SearchResult = { label: string; detail: string; to: string; kind: "Subject" | "Lesson" };
 
 const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -36,7 +49,7 @@ const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
   const results = useMemo<SearchResult[]>(() => {
     if (!normalizedQuery) return [];
 
-    const subjects = [...new Set(lessonsData.map((lesson) => lesson.subject))]
+    const subjects = searchableSubjects
       .filter((subject) => subject.toLocaleLowerCase().includes(normalizedQuery))
       .map((subject) => ({
         label: subject,
