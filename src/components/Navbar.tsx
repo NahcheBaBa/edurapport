@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Search, LogOut, User, Settings, Flame, Coins } from "lucide-react";
 import { Link as RouterLink } from "react-router-dom";
@@ -80,7 +80,7 @@ const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
     return () => document.removeEventListener("mousedown", closeOnOutsideClick);
   }, []);
 
-  const openFirstResult = (event: React.FormEvent<HTMLFormElement>) => {
+  const openFirstResult = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!results.length) return;
     navigate(results[0].to);
@@ -112,7 +112,7 @@ const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
       {isOpen && normalizedQuery && (
         <div
           id="site-search-results"
-          role="listbox"
+          role="region"
           aria-label="Search results"
           className="absolute left-0 right-0 top-full z-[60] mt-2 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-lg md:w-80"
         >
@@ -120,8 +120,6 @@ const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
             <Link
               key={`${result.kind}-${result.to}`}
               to={result.to}
-              role="option"
-              aria-selected="false"
               onClick={() => {
                 setQuery("");
                 setIsOpen(false);
@@ -272,7 +270,12 @@ const Navbar = () => {
         )}
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
+        <button
+          className="md:hidden text-foreground"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={open}
+        >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
