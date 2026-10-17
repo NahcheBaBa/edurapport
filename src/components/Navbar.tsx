@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Search, LogOut, User, Settings, Flame, Coins } from "lucide-react";
 import { Link as RouterLink } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useRewards } from "@/hooks/use-rewards";
 import logo from "@/assets/logo.png";
 import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
+import { lessonsData } from "@/data/lessons";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -23,6 +24,112 @@ const navLinks = [
 { label: "About us", to: "/about" },
 { label: "Contact us", href: "#contact" }];
 
+type SearchResult = { label: string; detail: string; to: string; kind: "Subject" | "Lesson" };
+
+const SearchBox = ({ onNavigate }: { onNavigate?: () => void }) => {
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+
+  const results = useMemo<SearchResult[]>(() => {
+    if (!normalizedQuery) return [];
+
+    const subjects = [...new Set(lessonsData.map((lesson) => lesson.subject))]
+      .filter((subject) => subject.toLocaleLowerCase().includes(normalizedQuery))
+      .map((subject) => ({
+        label: subject,
+        detail: "Browse subject lessons",
+        to: `/subjects/${encodeURIComponent(subject)}`,
+        kind: "Subject" as const,
+      }));
+
+    const lessons = lessonsData
+      .filter((lesson) =>
+        `${lesson.title} ${lesson.subject} ${lesson.artist}`.toLocaleLowerCase().includes(normalizedQuery),
+      )
+      .map((lesson) => ({
+        label: lesson.title,
+        detail: `${lesson.subject} · ${lesson.artist}`,
+        to: `/lessons/${lesson.id}`,
+        kind: "Lesson" as const,
+      }));
+
+    return [...subjects, ...lessons].slice(0, 8);
+  }, [normalizedQuery]);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (event.target instanceof Node && !containerRef.current?.contains(event.target)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    return () => document.removeEventListener("mousedown", closeOnOutsideClick);
+  }, []);
+
+  const openFirstResult = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!results.length) return;
+    navigate(results[0].to);
+    setQuery("");
+    setIsOpen(false);
+    onNavigate?.();
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full md:w-40 md:focus-within:w-56 transition-[width]">
+      <form onSubmit={openFirstResult} role="search">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" aria-hidden="true" />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          onFocus={() => setIsOpen(true)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") setIsOpen(false);
+          }}
+          placeholder="Search subjects & lessons"
+          aria-label="Search subjects and lessons"
+          aria-expanded={isOpen && normalizedQuery.length > 0}
+          aria-controls="site-search-results"
+          autoComplete="off"
+          className="h-10 w-full rounded-full border border-input bg-background pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+      </form>
+      {isOpen && normalizedQuery && (
+        <div
+          id="site-search-results"
+          role="listbox"
+          aria-label="Search results"
+          className="absolute left-0 right-0 top-full z-[60] mt-2 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-lg md:w-80"
+        >
+          {results.length ? results.map((result) => (
+            <Link
+              key={`${result.kind}-${result.to}`}
+              to={result.to}
+              role="option"
+              aria-selected="false"
+              onClick={() => {
+                setQuery("");
+                setIsOpen(false);
+                onNavigate?.();
+              }}
+              className="flex min-w-0 items-center justify-between gap-3 rounded-md px-3 py-2.5 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-foreground">{result.label}</span>
+                <span className="block truncate text-xs text-muted-foreground">{result.detail}</span>
+              </span>
+              <span className="shrink-0 text-[10px] font-bold uppercase text-primary">{result.kind}</span>
+            </Link>
+          )) : (
+            <p className="px-3 py-4 text-sm text-muted-foreground">No subjects or lessons found.</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -75,14 +182,7 @@ const Navbar = () => {
               </a>
             )
           )}
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="h-9 w-40 rounded-full border border-input bg-background pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:w-56 transition-all"
-            />
-          </div>
+          <SearchBox />
         </div>
 
         <div className="hidden md:flex items-center gap-3">
@@ -178,6 +278,9 @@ const Navbar = () => {
               </a>
             )
           )}
+          <div className="py-2">
+            <SearchBox onNavigate={() => setOpen(false)} />
+          </div>
           {user ? (
             <>
               <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 text-sm font-semibold text-foreground py-2">
