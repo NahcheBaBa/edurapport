@@ -7,3 +7,4 @@
 - [ ] Replace the lesson video placeholder with an AI tutor chat.
 - [ ] Support lesson-specific chat threads with route URLs and browser-local transcripts.
 - [ ] Deploy and verify authenticated streaming, chat UI, tests, and responsive preview behavior.
+- [ ] Build a poetry quiz using the Algebra quiz layout and the uploaded artwork for its jigsaw reveal.

@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useSavedLessons } from "@/hooks/use-saved-lessons";
+import LessonTutorChat from "@/components/lesson/LessonTutorChat";
 import { toast } from "@/hooks/use-toast";
 import { getLessonById, getLessonsForSubject, LyricAnnotation } from "@/data/lessons";
 import heroCharacter from "@/assets/hero-character.png";
@@ -586,19 +587,11 @@ const LessonDetail = () => {
 
             {/* Video Section */}
             {lesson.videoCaption && (
-              <div className="mt-10 text-center">
-                <p className="text-sm text-primary font-semibold mb-4">{lesson.videoCaption}</p>
-                <div className="bg-muted rounded-2xl overflow-hidden aspect-video flex items-center justify-center">
-                  <div className="text-center text-muted-foreground">
-                    <Play size={48} className="mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Video coming soon</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
-                  <Eye size={14} />
-                  <span>1.5k views</span>
-                </div>
-              </div>
+              <LessonTutorChat
+                lessonId={lesson.id}
+                lessonTitle={lesson.title}
+                subject={lesson.subject}
+              />
             )}
 
             {/* Design & Art Cards */}
