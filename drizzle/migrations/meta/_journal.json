@@ -8,6 +8,13 @@
       "when": 1791911081366,
       "tag": "0000_create_saved_lessons",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794567343106,
+      "tag": "0001_restrict_avatar_storage_reads",
+      "breakpoints": true
     }
   ]
 }

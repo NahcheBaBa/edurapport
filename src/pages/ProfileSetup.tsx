@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import AvatarUpload from "@/components/AvatarUpload";
 import SavedLessonsPanel from "@/components/profile/SavedLessonsPanel";
+import { getAvatarStoragePath } from "@/lib/avatar-storage";
 
 const SUBJECTS = [
   "English",
@@ -77,7 +78,9 @@ const ProfileSetup = () => {
       .then(({ data }) => {
         if (data) {
           setDisplayName(data.display_name ?? "");
-          setAvatarUrl(data.avatar_url ?? "");
+          setAvatarUrl(
+            getAvatarStoragePath(data.avatar_url, user.id) ?? data.avatar_url ?? "",
+          );
           setRole((data.role as "student" | "educator") ?? "student");
           setGrade(data.grade_level ?? "");
           setSubjects(data.subjects ?? []);

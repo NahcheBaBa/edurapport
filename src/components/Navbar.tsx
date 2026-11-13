@@ -8,6 +8,7 @@ import NotificationBell from "@/components/NotificationBell";
 import { useAuth } from "@/hooks/use-auth";
 import { lessonsData } from "@/data/lessons";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveAvatarUrl } from "@/lib/avatar-storage";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -151,8 +152,14 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!user) { setProfile(null); return; }
+    let active = true;
     supabase.from("profiles").select("display_name, avatar_url").eq("user_id", user.id).maybeSingle()
-      .then(({ data }) => setProfile(data));
+      .then(async ({ data }) => {
+        if (!active) return;
+        const avatarUrl = await resolveAvatarUrl(data?.avatar_url, user.id);
+        if (active) setProfile(data ? { ...data, avatar_url: avatarUrl } : null);
+      });
+    return () => { active = false; };
   }, [user]);
 
   const initials = (profile?.display_name || user?.email || "U")

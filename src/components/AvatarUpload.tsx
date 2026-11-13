@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import { Loader2, Upload, ZoomIn } from "lucide-react";
 
@@ -14,6 +14,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { getAvatarStoragePath, resolveAvatarUrl } from "@/lib/avatar-storage";
 
 interface AvatarUploadProps {
   userId: string;
@@ -64,6 +65,17 @@ const AvatarUpload = ({ userId, value, initials, onChange }: AvatarUploadProps) 
   const [zoom, setZoom] = useState(1);
   const [area, setArea] = useState<Area | null>(null);
   const [saving, setSaving] = useState(false);
+  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    resolveAvatarUrl(value, userId).then((url) => {
+      if (active) setDisplayUrl(url);
+    });
+    return () => {
+      active = false;
+    };
+  }, [value, userId]);
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -101,9 +113,7 @@ const AvatarUpload = ({ userId, value, initials, onChange }: AvatarUploadProps) 
         .from("avatars")
         .upload(path, blob, { contentType: "image/jpeg", upsert: true });
       if (error) throw error;
-      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-      const url = `${data.publicUrl}?v=${Date.now()}`;
-      onChange(url);
+      onChange(path);
       toast({ title: "Avatar updated" });
       setOpen(false);
       setSrc(null);
@@ -118,8 +128,8 @@ const AvatarUpload = ({ userId, value, initials, onChange }: AvatarUploadProps) 
   return (
     <div className="flex items-center gap-4">
       <div className="h-20 w-20 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0 border-2 border-border">
-        {value ? (
-          <img src={value} alt="Avatar" className="h-full w-full object-cover" />
+        {displayUrl ? (
+          <img src={displayUrl} alt="Avatar" className="h-full w-full object-cover" />
         ) : (
           <span className="font-heading font-bold text-2xl text-primary">{initials}</span>
         )}
