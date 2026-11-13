@@ -70,6 +70,7 @@ function formatThreadTitle(thread: LessonChatThread) {
 function LessonTutorConversation({
   lessonId,
   lessonTitle,
+  subject,
   thread,
   isAuthenticated,
   onMessagesChange,
