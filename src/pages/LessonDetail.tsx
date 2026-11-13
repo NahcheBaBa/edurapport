@@ -591,6 +591,7 @@ const LessonDetail = () => {
                 lessonId={lesson.id}
                 lessonTitle={lesson.title}
                 subject={lesson.subject}
+                isAuthenticated={Boolean(user)}
               />
             )}
 

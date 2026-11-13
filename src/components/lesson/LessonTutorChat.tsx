@@ -70,12 +70,14 @@ function formatThreadTitle(thread: LessonChatThread) {
 function LessonTutorConversation({
   lessonId,
   lessonTitle,
+  subject,
   thread,
   isAuthenticated,
   onMessagesChange,
 }: {
   lessonId: string;
   lessonTitle: string;
+  subject: string;
   thread: LessonChatThread;
   isAuthenticated: boolean;
   onMessagesChange: (messages: UIMessage[]) => void;
@@ -154,7 +156,7 @@ function LessonTutorConversation({
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 md:px-5">
         <div className="min-w-0">
           <p className="truncate text-sm font-heading font-bold text-foreground">{lessonTitle}</p>
-          <p className="text-xs text-muted-foreground">{subjectLabel(lessonId, lessonTitle)}</p>
+          <p className="text-xs text-muted-foreground">{subject} tutor</p>
         </div>
         <span className="shrink-0 text-[11px] text-muted-foreground">Saved in this browser</span>
       </div>
