@@ -624,7 +624,7 @@ const LessonDetail = () => {
             <div className="mt-10 text-center">
               <Link to={lesson.id === "algebra" ? "/quiz/algebra" : lesson.id === "parts-of-speech" ? "/quiz/parts-of-speech" : "#"}>
                 <Button className="gradient-primary text-primary-foreground font-heading font-bold rounded-full px-10 py-3 text-sm uppercase tracking-wider">
-                  Take a Quiz and Earn NNCs
+                  Take a Quiz and Earn Rewards
                 </Button>
               </Link>
             </div>
