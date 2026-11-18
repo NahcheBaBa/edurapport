@@ -1,4 +1,9 @@
+import { useCallback, useState } from "react";
+import { Mic, MicOff } from "lucide-react";
 import { QuizQuestion as QuizQuestionType } from "@/data/quizQuestions";
+import { Button } from "@/components/ui/button";
+import { useVoiceInput } from "@/hooks/use-voice-input";
+import { parseSpokenOption } from "@/lib/voice-answer";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -15,12 +20,45 @@ const QuizQuestionComponent = ({
 }: QuizQuestionProps) => {
   const answered = selectedAnswer !== null;
   const isCorrect = selectedAnswer === question.correctIndex;
+  const [voiceMessage, setVoiceMessage] = useState("");
+  const handleTranscript = useCallback((transcript: string) => {
+    const optionIndex = parseSpokenOption(transcript, question.options);
+    if (optionIndex === null) {
+      setVoiceMessage("I couldn't match that to an option. Say a letter, like “A”, or the full answer.");
+      return;
+    }
+    setVoiceMessage(`Heard option ${String.fromCharCode(65 + optionIndex)}.`);
+    onAnswer(optionIndex);
+  }, [onAnswer, question.options]);
+  const voiceInput = useVoiceInput(handleTranscript);
 
   return (
     <div className="w-full">
       <p className="text-base md:text-lg font-body font-semibold text-foreground leading-relaxed mb-6">
         {question.id}. {question.question}
       </p>
+
+      {!answered && (
+        <div className="mb-5 space-y-2">
+          <Button
+            type="button"
+            variant={voiceInput.isListening ? "secondary" : "outline"}
+            onClick={voiceInput.isListening ? voiceInput.stop : voiceInput.start}
+            aria-label={voiceInput.isListening ? "Stop recording answer" : "Answer with your voice"}
+            aria-pressed={voiceInput.isListening}
+            className="gap-2"
+          >
+            {voiceInput.isListening ? <MicOff /> : <Mic />}
+            {voiceInput.isListening ? "Listening… tap to stop" : "Answer with your voice"}
+          </Button>
+          {voiceInput.transcript && (
+            <p className="text-sm text-muted-foreground" aria-live="polite">Heard: “{voiceInput.transcript}”</p>
+          )}
+          {(voiceInput.error || voiceMessage) && (
+            <p className="text-sm text-muted-foreground" role="status">{voiceInput.error || voiceMessage}</p>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {question.options.map((option, idx) => {

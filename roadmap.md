@@ -8,4 +8,4 @@
 - [ ] Support lesson-specific chat threads with route URLs and browser-local transcripts.
 - [ ] Deploy and verify authenticated streaming, chat UI, tests, and responsive preview behavior.
 - [ ] Build a poetry quiz using the Algebra quiz layout and the uploaded artwork for its jigsaw reveal.
-- [ ] Add browser microphone speech input for quiz answers and Edna lesson conversations, with optional spoken Edna replies and text fallback.
+- [x] Add browser microphone speech input for quiz answers and Edna lesson conversations, with optional spoken Edna replies and text fallback.

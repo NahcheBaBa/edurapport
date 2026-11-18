@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
-import { AlertCircle, ArrowUp, Brain, MessageCircle, MessageSquarePlus, Plus, UserRound } from "lucide-react";
+import { AlertCircle, ArrowUp, Brain, MessageCircle, MessageSquarePlus, Mic, MicOff, Plus, UserRound, Volume2, VolumeX } from "lucide-react";
 import heroCharacter from "@/assets/hero-character.png";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,8 @@ import {
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { useToast } from "@/hooks/use-toast";
+import { useSpeech } from "@/hooks/use-speech";
+import { useVoiceInput } from "@/hooks/use-voice-input";
 import { supabase } from "@/integrations/supabase/client";
 import {
   createLessonChatThread,
@@ -84,6 +86,7 @@ function LessonTutorConversation({
 }) {
   const { toast } = useToast();
   const [draft, setDraft] = useState("");
+  const [spokenReplies, setSpokenReplies] = useState(false);
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
@@ -118,6 +121,13 @@ function LessonTutorConversation({
   });
   const isBusy = status === "submitted" || status === "streaming";
   const previousStatus = useRef(status);
+  const lastSpokenMessage = useRef<string | null>(null);
+  const { speak, stop: stopSpeaking, isSpeaking } = useSpeech();
+
+  const handleVoiceTranscript = useCallback((transcript: string) => {
+    setDraft((current) => current ? `${current.trimEnd()} ${transcript}` : transcript);
+  }, []);
+  const voiceInput = useVoiceInput(handleVoiceTranscript);
 
   useEffect(() => {
     const updated = updateLessonChatThread(
@@ -135,6 +145,20 @@ function LessonTutorConversation({
     }
     previousStatus.current = status;
   }, [status]);
+
+  useEffect(() => {
+    if (!spokenReplies || status !== "ready") return;
+    const latestReply = [...messages].reverse().find((message) => message.role === "assistant");
+    if (!latestReply || latestReply.id === lastSpokenMessage.current) return;
+    const replyText = latestReply.parts
+      .filter((part) => part.type === "text")
+      .map((part) => part.text)
+      .join(" ")
+      .trim();
+    if (!replyText) return;
+    lastSpokenMessage.current = latestReply.id;
+    speak(replyText);
+  }, [messages, speak, spokenReplies, status]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -158,7 +182,24 @@ function LessonTutorConversation({
           <p className="truncate text-sm font-heading font-bold text-foreground">{lessonTitle}</p>
           <p className="text-xs text-muted-foreground">{subject} tutor</p>
         </div>
-        <span className="shrink-0 text-[11px] text-muted-foreground">Saved in this browser</span>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            aria-pressed={spokenReplies}
+            aria-label={spokenReplies ? "Turn off spoken Edna replies" : "Read Edna replies aloud"}
+            onClick={() => {
+              setSpokenReplies((enabled) => !enabled);
+              if (spokenReplies) stopSpeaking();
+            }}
+            className="gap-1.5 px-2 text-xs"
+          >
+            {spokenReplies ? <Volume2 className={isSpeaking ? "animate-pulse" : ""} /> : <VolumeX />}
+            <span className="hidden sm:inline">{spokenReplies ? "Replies aloud" : "Read replies"}</span>
+          </Button>
+          <span className="hidden text-[11px] text-muted-foreground md:inline">Saved in this browser</span>
+        </div>
       </div>
 
       <Conversation className="min-h-[330px] flex-1">
@@ -257,7 +298,20 @@ function LessonTutorConversation({
               onChange={(event) => setDraft(event.currentTarget.value)}
               className="min-h-14 px-3"
             />
-            <PromptInputFooter className="justify-end border-t border-border px-2 py-2">
+            <PromptInputFooter className="justify-between border-t border-border px-2 py-2">
+              <Button
+                type="button"
+                size="icon"
+                variant={voiceInput.isListening ? "secondary" : "ghost"}
+                disabled={isBusy}
+                onClick={voiceInput.isListening ? voiceInput.stop : voiceInput.start}
+                aria-label={voiceInput.isListening ? "Stop recording message" : "Speak to Edna"}
+                aria-pressed={voiceInput.isListening}
+                title={voiceInput.isListening ? "Stop recording" : "Speak to Edna"}
+                className="size-8 rounded-md"
+              >
+                {voiceInput.isListening ? <MicOff /> : <Mic />}
+              </Button>
               <PromptInputSubmit
                 status={status}
                 disabled={isBusy ? false : !draft.trim()}
@@ -269,6 +323,11 @@ function LessonTutorConversation({
               </PromptInputSubmit>
             </PromptInputFooter>
           </PromptInput>
+          {(voiceInput.isListening || voiceInput.error) && (
+            <p className="mt-2 text-xs text-muted-foreground" role="status" aria-live="polite">
+              {voiceInput.error || (voiceInput.transcript ? `Heard: “${voiceInput.transcript}”` : "Listening… your words will appear in the message box.")}
+            </p>
+          )}
         ) : (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">Sign in to chat with Edna. Your chats stay in this browser.</p>
