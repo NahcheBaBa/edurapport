@@ -284,50 +284,52 @@ function LessonTutorConversation({
 
       <div className="border-t border-border p-3 md:p-4">
         {isAuthenticated ? (
-          <PromptInput
-            onSubmit={({ text }) => ask(text)}
-            className="rounded-md"
-            aria-label="Message Edna"
-          >
-            <PromptInputTextarea
-              data-lesson-chat-composer
-              aria-label="Message Edna about this lesson"
-              placeholder="Ask a question about this lesson…"
-              value={draft}
-              disabled={isBusy}
-              onChange={(event) => setDraft(event.currentTarget.value)}
-              className="min-h-14 px-3"
-            />
-            <PromptInputFooter className="justify-between border-t border-border px-2 py-2">
-              <Button
-                type="button"
-                size="icon"
-                variant={voiceInput.isListening ? "secondary" : "ghost"}
+          <>
+            <PromptInput
+              onSubmit={({ text }) => ask(text)}
+              className="rounded-md"
+              aria-label="Message Edna"
+            >
+              <PromptInputTextarea
+                data-lesson-chat-composer
+                aria-label="Message Edna about this lesson"
+                placeholder="Ask a question about this lesson…"
+                value={draft}
                 disabled={isBusy}
-                onClick={voiceInput.isListening ? voiceInput.stop : voiceInput.start}
-                aria-label={voiceInput.isListening ? "Stop recording message" : "Speak to Edna"}
-                aria-pressed={voiceInput.isListening}
-                title={voiceInput.isListening ? "Stop recording" : "Speak to Edna"}
-                className="size-8 rounded-md"
-              >
-                {voiceInput.isListening ? <MicOff /> : <Mic />}
-              </Button>
-              <PromptInputSubmit
-                status={status}
-                disabled={isBusy ? false : !draft.trim()}
-                onStop={stop}
-                aria-label={isBusy ? "Stop tutor reply" : "Send message"}
-                className="size-8 rounded-md"
-              >
-                {isBusy ? <span className="sr-only">Stop tutor reply</span> : <ArrowUp className="size-4" />}
-              </PromptInputSubmit>
-            </PromptInputFooter>
-          </PromptInput>
-          {(voiceInput.isListening || voiceInput.error) && (
-            <p className="mt-2 text-xs text-muted-foreground" role="status" aria-live="polite">
-              {voiceInput.error || (voiceInput.transcript ? `Heard: “${voiceInput.transcript}”` : "Listening… your words will appear in the message box.")}
-            </p>
-          )}
+                onChange={(event) => setDraft(event.currentTarget.value)}
+                className="min-h-14 px-3"
+              />
+              <PromptInputFooter className="justify-between border-t border-border px-2 py-2">
+                <Button
+                  type="button"
+                  size="icon"
+                  variant={voiceInput.isListening ? "secondary" : "ghost"}
+                  disabled={isBusy}
+                  onClick={voiceInput.isListening ? voiceInput.stop : voiceInput.start}
+                  aria-label={voiceInput.isListening ? "Stop recording message" : "Speak to Edna"}
+                  aria-pressed={voiceInput.isListening}
+                  title={voiceInput.isListening ? "Stop recording" : "Speak to Edna"}
+                  className="size-8 rounded-md"
+                >
+                  {voiceInput.isListening ? <MicOff /> : <Mic />}
+                </Button>
+                <PromptInputSubmit
+                  status={status}
+                  disabled={isBusy ? false : !draft.trim()}
+                  onStop={stop}
+                  aria-label={isBusy ? "Stop tutor reply" : "Send message"}
+                  className="size-8 rounded-md"
+                >
+                  {isBusy ? <span className="sr-only">Stop tutor reply</span> : <ArrowUp className="size-4" />}
+                </PromptInputSubmit>
+              </PromptInputFooter>
+            </PromptInput>
+            {(voiceInput.isListening || voiceInput.error) && (
+              <p className="mt-2 text-xs text-muted-foreground" role="status" aria-live="polite">
+                {voiceInput.error || (voiceInput.transcript ? `Heard: “${voiceInput.transcript}”` : "Listening… your words will appear in the message box.")}
+              </p>
+            )}
+          </>
         ) : (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">Sign in to chat with Edna. Your chats stay in this browser.</p>
