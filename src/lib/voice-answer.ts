@@ -3,7 +3,10 @@ export function parseSpokenOption(transcript: string, options: string[]): number
   if (!normalized) return null;
 
   const letterMatch = normalized.match(/^(?:(?:option|answer|letter) )?([a-d])(?: (?:please|is correct))?$/);
-  if (letterMatch?.[1]) return letterMatch[1].charCodeAt(0) - "a".charCodeAt(0);
+  if (letterMatch?.[1]) {
+    const index = letterMatch[1].charCodeAt(0) - "a".charCodeAt(0);
+    return index < options.length ? index : null;
+  }
 
   const matches = options.reduce<number[]>((found, option, index) => {
     const phrase = option.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();

@@ -12,8 +12,13 @@ describe("spoken quiz answers", () => {
     expect(parseSpokenOption("I think the answer is Quickly", options)).toBe(0);
   });
 
-  it("does not guess when speech is unclear or matches multiple options", () => {
+  it("recognizes an exact option without matching it inside another word", () => {
+    expect(parseSpokenOption("verb", ["Verb", "Adverb"])).toBe(0);
+  });
+
+  it("does not guess when speech is unclear, ambiguous, or outside the available options", () => {
     expect(parseSpokenOption("maybe", options)).toBeNull();
-    expect(parseSpokenOption("verb", ["Verb", "Adverb"])).toBeNull();
+    expect(parseSpokenOption("verb and adverb", ["Verb", "Adverb"])).toBeNull();
+    expect(parseSpokenOption("Option D", ["Yes", "No"])).toBeNull();
   });
 });

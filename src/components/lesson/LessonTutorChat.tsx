@@ -122,7 +122,7 @@ function LessonTutorConversation({
   const isBusy = status === "submitted" || status === "streaming";
   const previousStatus = useRef(status);
   const lastSpokenMessage = useRef<string | null>(null);
-  const { speak, stop: stopSpeaking, isSpeaking } = useSpeech();
+  const { speak, stop: stopSpeaking, isSpeaking, error: speechError } = useSpeech();
 
   const handleVoiceTranscript = useCallback((transcript: string) => {
     setDraft((current) => current ? `${current.trimEnd()} ${transcript}` : transcript);
@@ -169,10 +169,11 @@ function LessonTutorConversation({
   const ask = useCallback(
     async (text: string) => {
       if (!text.trim() || isBusy || !isAuthenticated) return;
+      voiceInput.stop();
       await sendMessage({ text: text.trim() });
       setDraft("");
     },
-    [isAuthenticated, isBusy, sendMessage],
+    [isAuthenticated, isBusy, sendMessage, voiceInput.stop],
   );
 
   return (
@@ -202,6 +203,7 @@ function LessonTutorConversation({
         </div>
       </div>
 
+      {speechError && <p className="border-b border-border px-4 py-2 text-xs text-muted-foreground" role="status">{speechError}</p>}
       <Conversation className="min-h-[330px] flex-1">
         <ConversationContent className="gap-5 p-4 md:p-5">
           {messages.length === 0 ? (
@@ -324,9 +326,9 @@ function LessonTutorConversation({
                 </PromptInputSubmit>
               </PromptInputFooter>
             </PromptInput>
-            {(voiceInput.isListening || voiceInput.error) && (
+            {(voiceInput.isListening || voiceInput.error || voiceInput.transcript) && (
               <p className="mt-2 text-xs text-muted-foreground" role="status" aria-live="polite">
-                {voiceInput.error || (voiceInput.transcript ? `Heard: “${voiceInput.transcript}”` : "Listening… your words will appear in the message box.")}
+                {voiceInput.error || (voiceInput.transcript && !voiceInput.isListening ? `Heard: “${voiceInput.transcript}”` : "Listening… your words will appear in the message box.")}
               </p>
             )}
           </>

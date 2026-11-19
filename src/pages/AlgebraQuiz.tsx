@@ -17,7 +17,7 @@ const AlgebraQuiz = () => {
   const [answers, setAnswers] = useState<Map<number, number>>(new Map());
   const [revealedPieces, setRevealedPieces] = useState<Set<number>>(new Set());
   const [audioOn, setAudioOn] = useState(false);
-  const { speak, stop, isSpeaking, rate, setRate } = useSpeech();
+  const { speak, stop, isSpeaking, rate, setRate, error: speechError } = useSpeech();
   const { applyActivity, completeQuizSet } = useRewards();
 
   const correctCount = revealedPieces.size;
@@ -135,6 +135,7 @@ const AlgebraQuiz = () => {
                   <span className="font-semibold text-foreground w-8">{rate}x</span>
                 </div>
               )}
+              {speechError && <p className="text-xs text-muted-foreground" role="status">{speechError}</p>}
             </div>
           </div>
 

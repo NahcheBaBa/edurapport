@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Mic, MicOff } from "lucide-react";
 import { QuizQuestion as QuizQuestionType } from "@/data/quizQuestions";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,10 @@ const QuizQuestionComponent = ({
   }, [onAnswer, question.options]);
   const voiceInput = useVoiceInput(handleTranscript);
 
+  useEffect(() => {
+    if (answered) voiceInput.stop();
+  }, [answered, voiceInput.stop]);
+
   return (
     <div className="w-full">
       <p className="text-base md:text-lg font-body font-semibold text-foreground leading-relaxed mb-6">
@@ -43,7 +47,11 @@ const QuizQuestionComponent = ({
           <Button
             type="button"
             variant={voiceInput.isListening ? "secondary" : "outline"}
-            onClick={voiceInput.isListening ? voiceInput.stop : voiceInput.start}
+            onClick={() => {
+              setVoiceMessage("");
+              if (voiceInput.isListening) voiceInput.stop();
+              else voiceInput.start();
+            }}
             aria-label={voiceInput.isListening ? "Stop recording answer" : "Answer with your voice"}
             aria-pressed={voiceInput.isListening}
             className="gap-2"
