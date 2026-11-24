@@ -11,6 +11,7 @@ export interface DesignArtCard {
   image: string;
   title: string;
   description: string;
+  extendedDescription?: string;
 }
 
 export interface Lesson {
@@ -326,7 +327,8 @@ Waiting to be unraveled, one equation, one variable, one beautiful solution at a
       {
         image: "/assets/fractal-art.jpg",
         title: "Fractals & Art",
-        description: "Fractals, those infinitely detailed self-similar patterns, are a fascinating bridge between math and art. Algebra plays a starring role in their creation. Artists like Vincent Van Gogh & Jackson Pollock all used and applied Fractals...",
+        description: "Fractals are intricate patterns that repeat at different scales—a striking meeting point of mathematics and art. Algebraic rules can generate these patterns, while some paintings are studied for their fractal-like qualities.",
+        extendedDescription: "A famous example is the Mandelbrot set. It is created by repeatedly squaring a number and adding a constant; plotting the results reveals a shape with endlessly detailed edges. Similar repetition appears in fern leaves, branching trees, and coastlines. Artists and designers can use fractal ideas to create natural-looking textures and digital worlds. Some patterns in Vincent van Gogh’s swirling skies and Jackson Pollock’s drip paintings are compared with fractals, though that does not mean the artists used algebraic formulas to create them.",
       },
       {
         image: "/assets/web-design-math.jpg",

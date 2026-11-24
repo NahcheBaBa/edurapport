@@ -36,6 +36,7 @@ const LessonDetail = () => {
   const { user } = useAuth();
   const { savedLessonIds, loading: savedLessonsLoading, toggleSavedLesson } = useSavedLessons();
   const [commentText, setCommentText] = useState("");
+  const [expandedArtCard, setExpandedArtCard] = useState<string | null>(null);
   const [comments, setComments] = useState(lesson?.comments || []);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -599,23 +600,43 @@ const LessonDetail = () => {
             {lesson.designArtCards && lesson.designArtCards.length > 0 && (
               <div className="mt-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {lesson.designArtCards.map((card, i) => (
-                    <div key={i} className="bg-muted rounded-2xl overflow-hidden group">
-                      <div className="aspect-[4/3] overflow-hidden">
-                        <img
-                          src={cardImageMap[card.image] || card.image}
-                          alt={card.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                  {lesson.designArtCards.map((card, i) => {
+                    const cardKey = `${lesson.id}-${i}`;
+                    const detailsId = `${cardKey}-details`;
+                    const isExpanded = expandedArtCard === cardKey;
+
+                    return (
+                      <div key={cardKey} className="bg-muted rounded-2xl overflow-hidden group">
+                        <div className="aspect-[4/3] overflow-hidden">
+                          <img
+                            src={cardImageMap[card.image] || card.image}
+                            alt={card.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="p-4">
+                          <p className="text-sm text-foreground leading-relaxed">{card.description}</p>
+                          {isExpanded && card.extendedDescription && (
+                            <p id={detailsId} className="mt-2 text-sm text-foreground leading-relaxed">
+                              {card.extendedDescription}
+                            </p>
+                          )}
+                          {card.extendedDescription && (
+                            <Button
+                              type="button"
+                              variant="link"
+                              className="h-auto px-0 py-1 text-sm font-semibold"
+                              aria-expanded={isExpanded}
+                              aria-controls={detailsId}
+                              onClick={() => setExpandedArtCard(isExpanded ? null : cardKey)}
+                            >
+                              {isExpanded ? "Read Less" : "Read More"}
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                      <div className="p-4">
-                        <p className="text-sm text-foreground leading-relaxed">
-                          {card.description}
-                          <button className="text-primary font-semibold ml-1 hover:underline">Read More</button>
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
